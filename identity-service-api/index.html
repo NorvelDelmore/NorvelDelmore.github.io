@@ -1,0 +1,3522 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.119.0">
+<meta name="robots" content="index, follow">
+
+
+<link rel="shortcut icon" href="/favicons/favicon.ico" >
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon-180x180.png" sizes="180x180">
+<link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicons/android-36x36.png" sizes="36x36">
+<link rel="icon" type="image/png" href="/favicons/android-48x48.png" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicons/android-72x72.png" sizes="72x72">
+<link rel="icon" type="image/png" href="/favicons/android-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicons/android-144x144.png" sizes="144x144">
+<link rel="icon" type="image/png" href="/favicons/android-192x192.png" sizes="192x192">
+
+<title>Identity Service API | Matrix Specification</title>
+<meta name="description" content="The Matrix client-server and server-server APIs are largely expressed in Matrix user identifiers. From time to time, it is useful to refer to users by other (&amp;ldquo;third-party&amp;rdquo;) identifiers, or &amp;ldquo;3PID&amp;quot;s, e.g. their email address or phone number. This Identity Service Specification describes how mappings between third-party identifiers and Matrix user identifiers can be established, validated, and used. This description technically may apply to any 3PID, but in practice has only been applied specifically to email addresses and phone numbers.">
+<meta property="og:title" content="Identity Service API" />
+<meta property="og:description" content="The Matrix client-server and server-server APIs are largely expressed in Matrix user identifiers. From time to time, it is useful to refer to users by other (&ldquo;third-party&rdquo;) identifiers, or &ldquo;3PID&quot;s, e.g. their email address or phone number. This Identity Service Specification describes how mappings between third-party identifiers and Matrix user identifiers can be established, validated, and used. This description technically may apply to any 3PID, but in practice has only been applied specifically to email addresses and phone numbers." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/identity-service-api/" /><meta property="article:section" content="" />
+
+
+<meta itemprop="name" content="Identity Service API">
+<meta itemprop="description" content="The Matrix client-server and server-server APIs are largely expressed in Matrix user identifiers. From time to time, it is useful to refer to users by other (&ldquo;third-party&rdquo;) identifiers, or &ldquo;3PID&quot;s, e.g. their email address or phone number. This Identity Service Specification describes how mappings between third-party identifiers and Matrix user identifiers can be established, validated, and used. This description technically may apply to any 3PID, but in practice has only been applied specifically to email addresses and phone numbers.">
+
+<meta itemprop="wordCount" content="8138">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Identity Service API"/>
+<meta name="twitter:description" content="The Matrix client-server and server-server APIs are largely expressed in Matrix user identifiers. From time to time, it is useful to refer to users by other (&ldquo;third-party&rdquo;) identifiers, or &ldquo;3PID&quot;s, e.g. their email address or phone number. This Identity Service Specification describes how mappings between third-party identifiers and Matrix user identifiers can be established, validated, and used. This description technically may apply to any 3PID, but in practice has only been applied specifically to email addresses and phone numbers."/>
+
+
+
+
+<link rel="preload" href="/scss/main.min.af4c3a756149c6e6a38a514505696051afd07c3cc0ac1bb64498d5cd0c8f613b.css" as="style">
+<link href="/scss/main.min.af4c3a756149c6e6a38a514505696051afd07c3cc0ac1bb64498d5cd0c8f613b.css" rel="stylesheet" integrity="">
+
+<script
+  src="/js/jquery-3.6.0.min.js"
+  integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK">
+</script>
+
+
+
+<link rel="preload" href="/css/fonts/Inter.css" as="style">
+<link rel="stylesheet" href="/css/fonts/Inter.css">
+
+
+
+
+<link rel="preload" href="/scss/custom.min.e7010c4aa0015f690b91b7b50c35f1a5f21ea69d2fe93db6b124deb2722a2dcf.css" as="style">
+<link href="/scss/custom.min.e7010c4aa0015f690b91b7b50c35f1a5f21ea69d2fe93db6b124deb2722a2dcf.css" rel="stylesheet" integrity="">
+
+
+  </head>
+  <body class="td-page">
+    <header>
+      
+
+
+<nav class="js-navbar-scroll navbar navbar-expand navbar-light flex-column flex-md-row td-navbar">
+        <a class="navbar-brand" href="/">
+		<span class="navbar-logo"><svg width="75" height="32" xmlns="http://www.w3.org/2000/svg"><g fill="#000" fill-rule="nonzero"><path d="M.936.732V31.25H3.13v.732H.095V0h3.034v.732zm8.45 9.675v1.544h.044a4.461 4.461.0 011.487-1.368c.58-.323 1.245-.485 1.993-.485.72.0 1.377.14 1.972.42.595.279 1.047.771 1.355 1.477.338-.5.796-.941 1.377-1.323.58-.383 1.266-.574 2.06-.574.602.0 1.16.074 1.674.22.514.148.954.383 1.322.707.366.323.653.746.859 1.268.205.522.308 1.15.308 1.887v7.633H20.71v-6.464c0-.383-.015-.743-.044-1.082a2.305 2.305.0 00-.242-.882 1.473 1.473.0 00-.584-.596c-.257-.146-.606-.22-1.047-.22-.44.0-.796.085-1.068.253-.272.17-.485.39-.639.662a2.654 2.654.0 00-.308.927 7.074 7.074.0 00-.078 1.048v6.354h-3.128v-6.398c0-.338-.007-.673-.021-1.004a2.825 2.825.0 00-.188-.916 1.411 1.411.0 00-.55-.673c-.258-.168-.636-.253-1.135-.253a2.33 2.33.0 00-.584.1 1.94 1.94.0 00-.705.374c-.228.184-.422.449-.584.794-.161.346-.242.798-.242 1.357v6.619H6.434V10.407h2.952zm16.456 1.677a3.751 3.751.0 011.233-1.17 5.37 5.37.0 011.685-.629 9.579 9.579.0 011.884-.187c.573.0 1.153.04 1.74.121.588.081 1.124.24 1.609.475.484.235.88.562 1.19.981.308.42.462.975.462 1.666v5.934c0 .516.03 1.008.088 1.478.058.471.161.824.308 1.06H32.87a4.435 4.435.0 01-.22-1.104c-.5.515-1.087.876-1.762 1.081a7.084 7.084.0 01-2.071.31c-.544.0-1.05-.067-1.52-.2a3.472 3.472.0 01-1.234-.617 2.87 2.87.0 01-.826-1.059c-.199-.426-.298-.934-.298-1.522.0-.647.114-1.18.342-1.6.227-.419.52-.753.881-1.004.36-.25.771-.437 1.234-.562.462-.125.929-.224 1.399-.298.47-.073.932-.132 1.387-.176.456-.044.86-.11 1.212-.199.353-.088.631-.217.837-.386.206-.169.301-.415.287-.74.0-.337-.055-.606-.166-.804a1.217 1.217.0 00-.44-.464 1.737 1.737.0 00-.639-.22 5.292 5.292.0 00-.782-.055c-.617.0-1.101.132-1.454.397-.352.264-.558.706-.617 1.323h-3.128c.044-.735.227-1.345.55-1.83zm6.179 4.423a5.095 5.095.0 01-.639.165 9.68 9.68.0 01-.716.11c-.25.03-.5.067-.749.11a5.616 5.616.0 00-.694.177 2.057 2.057.0 00-.594.298c-.17.125-.305.284-.408.474-.103.192-.154.434-.154.728.0.28.051.515.154.706.103.192.242.342.419.453.176.11.381.187.617.231.234.044.477.066.726.066.617.0 1.094-.102 1.432-.309.338-.205.587-.452.75-.739.16-.286.26-.576.297-.87.036-.295.055-.53.055-.707v-1.17a1.4 1.4.0 01-.496.277zm11.863-6.1v2.096h-2.291v5.647c0 .53.088.883.264 1.059.176.177.529.265 1.057.265.177.0.345-.007.507-.022.161-.015.316-.037.463-.066v2.426a7.49 7.49.0 01-.882.089 21.67 21.67.0 01-.947.022c-.484.0-.944-.034-1.377-.1a3.233 3.233.0 01-1.145-.386 2.04 2.04.0 01-.782-.816c-.191-.353-.287-.816-.287-1.39v-6.728H36.57v-2.096h1.894v-3.42h3.129v3.42h2.29zm4.471.0v2.118h.044a3.907 3.907.0 011.454-1.754 4.213 4.213.0 011.036-.497 3.734 3.734.0 011.145-.176c.206.0.433.037.683.11v2.912a5.862 5.862.0 00-.528-.077 5.566 5.566.0 00-.595-.033c-.573.0-1.058.096-1.454.287a2.52 2.52.0 00-.958.783 3.143 3.143.0 00-.518 1.158 6.32 6.32.0 00-.154 1.434v5.14h-3.128V10.407h2.973zM54.039 8.642V6.06h3.128v2.582H54.04zm3.128 1.765v11.405H54.04V10.407h3.128zm1.63.0h3.569l2.005 2.978 1.982-2.978h3.459l-3.745 5.339 4.208 6.067h-3.57l-2.378-3.596-2.38 3.596h-3.502l4.097-6.001zM74.094 31.25V.732H71.9V0h3.035v31.982H71.9v-.732z"/></g></svg></span><span class="font-weight-bold">specification</span><span class="navbar-version"> &mdash; unstable version</span>
+	</a>
+	<div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
+		<ul class="navbar-nav mt-2 mt-lg-0">
+
+			<li class="nav-item mr-4 mb-2 mb-lg-0"><a href="https://matrix.org/foundation/">Foundation</a>
+			</li>
+
+      <li class="nav-item mr-4 mb-2 mb-lg-0"><a href="https://matrix.org/faq/">FAQs</a>
+			</li>
+
+      <li class="nav-item mr-4 mb-2 mb-lg-0"><a href="https://matrix.org/blog/posts">Blog</a>
+      </li>
+
+			
+			
+		</ul>
+	</div>
+	<div class="navbar-nav d-none d-lg-block"></div>
+</nav>
+
+
+
+
+    </header>
+    <div class="container-fluid td-outer">
+      <div class="td-main">
+        <div class="row flex-xl-nowrap">
+          <div class="col-12 col-md-3 col-xl-3 td-sidebar d-print-none">
+            
+<div id="td-sidebar-menu" class="td-sidebar__inner">
+  <div id="content-mobile">
+  <form class="td-sidebar__search d-flex align-items-center">
+    
+    <button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type="button" data-toggle="collapse" data-target="#td-section-nav" aria-controls="td-section-nav" aria-expanded="false" aria-label="Toggle section navigation">
+    </button>
+  </form>
+  </div>
+  <div id="content-desktop"></div>
+  <nav class="collapse td-sidebar-nav" id="td-section-nav">
+    <ul class="td-sidebar-nav__section pr-md-3 ul-0">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m--li">
+  <a href="/" class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id="m-"><span class="">Matrix Specification</span></a>
+  <ul class="ul-1">
+    <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-client-server-api-li">
+  <a href="/client-server-api/" class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id="m-client-server-api"><span class="">Client-Server API</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-server-server-api-li">
+  <a href="/server-server-api/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-server-server-api"><span class="">Server-Server API</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-application-service-api-li">
+  <a href="/application-service-api/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-application-service-api"><span class="">Application Service API</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id="m-identity-service-api-li">
+  <a href="/identity-service-api/" class="align-left pl-0 active td-sidebar-link td-sidebar-link__page" id="m-identity-service-api"><span class="td-sidebar-nav-active-item">Identity Service API</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-push-gateway-api-li">
+  <a href="/push-gateway-api/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-push-gateway-api"><span class="">Push Gateway API</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-rooms-li">
+  <a href="/rooms/" class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id="m-rooms"><span class="">Room Versions</span></a>
+  <ul class="ul-2 foldable">
+    <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv1-li">
+  <a href="/rooms/v1/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv1"><span class="">Room Version 1</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv2-li">
+  <a href="/rooms/v2/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv2"><span class="">Room Version 2</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv3-li">
+  <a href="/rooms/v3/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv3"><span class="">Room Version 3</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv4-li">
+  <a href="/rooms/v4/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv4"><span class="">Room Version 4</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv5-li">
+  <a href="/rooms/v5/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv5"><span class="">Room Version 5</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv6-li">
+  <a href="/rooms/v6/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv6"><span class="">Room Version 6</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv7-li">
+  <a href="/rooms/v7/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv7"><span class="">Room Version 7</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv8-li">
+  <a href="/rooms/v8/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv8"><span class="">Room Version 8</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv9-li">
+  <a href="/rooms/v9/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv9"><span class="">Room Version 9</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv10-li">
+  <a href="/rooms/v10/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv10"><span class="">Room Version 10</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv11-li">
+  <a href="/rooms/v11/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv11"><span class="">Room Version 11</span></a>
+</li>
+  </ul>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-proposals-li">
+  <a href="/proposals/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-proposals"><span class="">Spec Change Proposals</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-appendices-li">
+  <a href="/appendices/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-appendices"><span class="">Appendices</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-changelog-li">
+  <a href="/changelog/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-changelog"><span class="">Changelog</span></a>
+</li>
+  </ul>
+</li>
+    </ul>
+  </nav>
+</div>
+
+          </div>
+          <main class="col-12 col-md-9 col-xl-7 pl-md-5" role="main">
+            
+
+
+
+
+
+
+<div class="pageinfo pageinfo-primary pageinfo-unstable">
+  <p>You're looking at an unstable version of this specification.
+  Unstable specifications may change at any time without notice.</p>
+  <p><a href="https://spec.matrix.org/latest">Switch to the current stable release</a>.</p>
+</div>
+
+
+            
+
+
+<nav aria-label="breadcrumb" class="d-none d-md-block d-print-none">
+	<ol class="breadcrumb spb-1">
+
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/">Matrix Specification</a>
+</li>
+
+
+
+<li class="breadcrumb-item active" aria-current="page">
+	<a href="/identity-service-api/">Identity Service API</a>
+</li>
+
+	</ol>
+</nav	>
+
+
+
+
+            
+<div class="td-content">
+	<h1>Identity Service API</h1>
+	<p>The Matrix client-server and server-server APIs are largely expressed in
+Matrix user identifiers. From time to time, it is useful to refer to
+users by other (&ldquo;third-party&rdquo;) identifiers, or &ldquo;3PID&quot;s, e.g. their email
+address or phone number. This Identity Service Specification describes
+how mappings between third-party identifiers and Matrix user identifiers
+can be established, validated, and used. This description technically
+may apply to any 3PID, but in practice has only been applied
+specifically to email addresses and phone numbers.</p>
+<h2 id="general-principles">General principles</h2>
+<p>The purpose of an identity server is to validate, store, and answer
+questions about the identities of users. In particular, it stores
+associations of the form &ldquo;identifier X represents the same user as
+identifier Y&rdquo;, where identities may exist on different systems (such as
+email addresses, phone numbers, Matrix user IDs, etc).</p>
+<p>The identity server has some private-public keypairs. When asked about
+an association, it will sign details of the association with its private
+key. Clients may validate the assertions about associations by verifying
+the signature with the public key of the identity server.</p>
+<p>In general, identity servers are treated as reliable oracles. They do
+not necessarily provide evidence that they have validated associations,
+but claim to have done so. Establishing the trustworthiness of an
+individual identity server is left as an exercise for the client.</p>
+<p>3PID types are described in <a href="/appendices#3pid-types">3PID Types</a>
+Appendix.</p>
+<h2 id="api-standards">API standards</h2>
+<p>The mandatory baseline for identity server communication in Matrix is
+exchanging JSON objects over HTTP APIs. HTTPS is required for
+communication.</p>
+<p>All <code>POST</code> and <code>PUT</code> endpoints, with the exception (for historical reasons) of <a href="#post_matrixidentityv2accountlogout"><code>POST /_matrix/identity/v2/account/logout</code></a>,
+require the client to supply a request body containing a (potentially empty)
+JSON object. Clients should supply a <code>Content-Type</code> header of <code>application/json</code>
+for all requests with JSON bodies, but this is not required.</p>
+<p>Similarly, all endpoints require the server to return a JSON object.  Servers
+must include a <code>Content-Type</code> header of <code>application/json</code> for all JSON
+responses.</p>
+<p>All JSON data, in requests or responses, must be encoded using UTF-8.</p>
+<h3 id="standard-error-response">Standard error response</h3>
+<p>Any errors which occur at the Matrix API level MUST return a &ldquo;standard
+error response&rdquo;. This is a JSON object which looks like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;error code&gt;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;error message&gt;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The <code>error</code> string will be a human-readable error message, usually a
+sentence explaining what went wrong. The <code>errcode</code> string will be a
+unique string which can be used to handle an error message e.g.
+<code>M_FORBIDDEN</code>. There may be additional keys depending on the error, but
+the keys <code>error</code> and <code>errcode</code> MUST always be present.</p>
+<p>Some standard error codes are below:</p>
+<p><code>M_NOT_FOUND</code>
+The resource requested could not be located.</p>
+<p><code>M_MISSING_PARAMS</code>
+The request was missing one or more parameters.</p>
+<p><code>M_INVALID_PARAM</code>
+The request contained one or more invalid parameters.</p>
+<p><code>M_SESSION_NOT_VALIDATED</code>
+The session has not been validated.</p>
+<p><code>M_NO_VALID_SESSION</code>
+A session could not be located for the given parameters.</p>
+<p><code>M_SESSION_EXPIRED</code>
+The session has expired and must be renewed.</p>
+<p><code>M_INVALID_EMAIL</code>
+The email address provided was not valid.</p>
+<p><code>M_EMAIL_SEND_ERROR</code>
+There was an error sending an email. Typically seen when attempting to
+verify ownership of a given email address.</p>
+<p><code>M_INVALID_ADDRESS</code>
+The provided third-party address was not valid.</p>
+<p><code>M_SEND_ERROR</code>
+There was an error sending a notification. Typically seen when
+attempting to verify ownership of a given third-party address.</p>
+<p><code>M_UNRECOGNIZED</code>
+The request contained an unrecognised value, such as an unknown token or
+medium.</p>
+<p>This is also used as the response if a server did not understand the request.
+This is expected to be returned with a 404 HTTP status code if the endpoint is
+not implemented or a 405 HTTP status code if the endpoint is implemented, but
+the incorrect HTTP method is used.</p>
+<p><code>M_THREEPID_IN_USE</code>
+The third-party identifier is already in use by another user. Typically
+this error will have an additional <code>mxid</code> property to indicate who owns
+the third-party identifier.</p>
+<p><code>M_UNKNOWN</code>
+An unknown error has occurred.</p>
+<h2 id="privacy">Privacy</h2>
+<p>Identity is a privacy-sensitive issue. While the identity server exists
+to provide identity information, access should be restricted to avoid
+leaking potentially sensitive data. In particular, being able to
+construct large-scale connections between identities should be avoided.
+To this end, in general APIs should allow a 3PID to be mapped to a
+Matrix user identity, but not in the other direction (i.e. one should
+not be able to get all 3PIDs associated with a Matrix user ID, or get
+all 3PIDs associated with a 3PID).</p>
+<h2 id="web-browser-clients">Web browser clients</h2>
+<p>It is realistic to expect that some clients will be written to be run
+within a web browser or similar environment. In these cases, the
+identity server should respond to pre-flight requests and supply
+Cross-Origin Resource Sharing (CORS) headers on all requests.</p>
+<p>When a client approaches the server with a pre-flight (OPTIONS) request,
+the server should respond with the CORS headers for that route. The
+recommended CORS headers to be returned by servers on all requests are:</p>
+<pre><code>Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization
+</code></pre>
+<h2 id="api-version-check">API Version check</h2>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_matrixidentityversions">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_matrix/identity/versions</span>
+  </h1>
+</summary>
+  <hr/>
+<p><strong>Added in <code>v1.1</code></strong></p>
+<p><p>Gets the versions of the specification supported by the server.</p>
+<p>Values will take the form <code>vX.Y</code> or <code>rX.Y.Z</code> in historical cases. See
+<a href="../#specification-versions">the Specification Versioning</a> for more
+information.</p>
+<p>All supported versions, including patch versions, are reported by the server.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>No</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<p>No request parameters or request body.</p>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The versions supported by the server.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>versions</code></td>
+  <td><code>[string]</code></td>
+  <td>
+    <strong>Required: </strong>The supported versions.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;versions&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;r0.2.0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;r0.2.1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;v1.1&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h2 id="authentication">Authentication</h2>
+<p>Most endpoints in the Identity Service API require authentication
+in order to ensure that the requesting user has accepted all relevant
+policies and is otherwise permitted to make the request.</p>
+<p>Identity Servers use a scheme similar to the Client-Server API&rsquo;s concept
+of access tokens to authenticate users. The access tokens provided by an
+Identity Server cannot be used to authenticate Client-Server API
+requests.</p>
+<p>An access token is provided to an endpoint in one of two ways:</p>
+<ol>
+<li>Via a query string parameter, <code>access_token=TheTokenHere</code>.</li>
+<li>Via a request header, <code>Authorization: Bearer TheTokenHere</code>.</li>
+</ol>
+<p>Clients are encouraged to the use the <code>Authorization</code> header where
+possible to prevent the access token being leaked in access/HTTP logs.
+The query string should only be used in cases where the <code>Authorization</code>
+header is inaccessible for the client.</p>
+<p>When credentials are required but missing or invalid, the HTTP call will
+return with a status of 401 and the error code <code>M_UNAUTHORIZED</code>.</p>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_matrixidentityv2account">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_matrix/identity/v2/account</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Gets information about what user owns the access token used in the request.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<p>No request parameters or request body.</p>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The token holder&rsquo;s information.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>user_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The user ID which registered the token.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;user_id&#34;</span><span class="p">:</span> <span class="s2">&#34;@alice:example.org&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_matrixidentityv2account_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv2accountlogout">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/account/logout</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Logs out the access token, preventing it from being used to authenticate
+future requests to the server.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<p>No request parameters or request body.</p>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The token was successfully logged out.</td>
+ </tr>
+ <tr>
+  <td><code>401</code></td>
+  <td>The token is not registered or is otherwise unknown to the server.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div><h3>401 response</h3>
+<table id="_matrixidentityv2accountlogout_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_UNKNOWN_TOKEN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Unrecognised access token&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_matrixidentityv2accountlogout_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv2accountregister">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/account/register</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Exchanges an OpenID token from the homeserver for an access token to
+access the identity server. The request body is the same as the values
+returned by <code>/openid/request_token</code> in the Client-Server API.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>No</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table id="_matrixidentityv2accountregister_openidcredentials" class="object-table">
+ <caption>OpenIdCredentials</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>access_token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An access token the consumer may use to verify the identity of
+the person who generated the token. This is given to the federation
+API <code>GET /openid/userinfo</code> to verify the user&rsquo;s identity.</td>
+ </tr>
+ <tr>
+  <td><code>expires_in</code></td>
+  <td><code>integer</code></td>
+  <td>
+    <strong>Required: </strong>The number of seconds before this token expires and a new one must
+be generated.</td>
+ </tr>
+ <tr>
+  <td><code>matrix_server_name</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The homeserver domain the consumer should use when attempting to
+verify the user&rsquo;s identity.</td>
+ </tr>
+ <tr>
+  <td><code>token_type</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The string <code>Bearer</code>.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>A token which can be used to authenticate future requests to the
+identity server.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An opaque string representing the token to authenticate future
+requests to the identity server with.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;token&#34;</span><span class="p">:</span> <span class="s2">&#34;abc123_OpaqueString&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h2 id="terms-of-service">Terms of service</h2>
+<p>Identity Servers are encouraged to have terms of service (or similar
+policies) to ensure that users have agreed to their data being processed
+by the server. To facilitate this, an identity server can respond to
+almost any authenticated API endpoint with an HTTP 403 and the error
+code <code>M_TERMS_NOT_SIGNED</code>. The error code is used to indicate that the
+user must accept new terms of service before being able to continue.</p>
+<p>All endpoints which support authentication can return the
+<code>M_TERMS_NOT_SIGNED</code> error. When clients receive the error, they are
+expected to make a call to <code>GET /terms</code> to find out what terms the
+server offers. The client compares this to the <code>m.accepted_terms</code>
+account data for the user (described later) and presents the user with
+option to accept the still-missing terms of service. After the user has
+made their selection, if applicable, the client sends a request to
+<code>POST /terms</code> to indicate the user&rsquo;s acceptance. The server cannot
+expect that the client will send acceptance for all pending terms, and
+the client should not expect that the server will not respond with
+another <code>M_TERMS_NOT_SIGNED</code> on their next request. The terms the user
+has just accepted are appended to <code>m.accepted_terms</code>.</p>
+<section class="rendered-data event">
+<details open>
+<summary>
+  <h1 id="maccepted_terms">
+   <code>m.accepted_terms</code>
+  </h1>
+</summary>
+  <hr/>
+<p>A list of terms URLs the user has previously accepted. Clients SHOULD use this
+to avoid presenting the user with terms they have already agreed to.</p>
+<table class="basic-info">
+  <tr>
+   <th>Event type:</th>
+   <td>Message event</td>
+  </tr>
+</table>
+<h2>Content</h2>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>accepted</code></td>
+  <td><code>[string]</code></td>
+  <td>
+    The list of URLs the user has previously accepted. Should be appended to
+when the user agrees to new terms.</td>
+ </tr>
+</table>
+<h2>Examples</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;accepted&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;https://example.org/somewhere/terms-1.2-en.html&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;https://example.org/somewhere/privacy-1.2-en.html&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.accepted_terms&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></section>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_matrixidentityv2terms">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_matrix/identity/v2/terms</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Gets all the terms of service offered by the server. The client is expected
+to filter through the terms to determine which terms need acceptance from the
+user. Note that this endpoint does not require authentication.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>No</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<p>No request parameters or request body.</p>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The terms of service offered by the server.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>policies</code></td>
+  <td><code>Policy Map</code></td>
+  <td>
+    <strong>Required: </strong>The policies the server offers. Mapped from arbitrary ID (unused in
+this version of the specification) to a Policy Object.</td>
+ </tr>
+</table>
+<table id="_matrixidentityv2terms_policy-object" class="object-table">
+ <caption>Policy Object</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>version</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The version for the policy. There are no requirements on what this
+might be and could be &ldquo;alpha&rdquo;, semantically versioned, or arbitrary.</td>
+ </tr>
+</table>
+<table id="_matrixidentityv2terms_internationalised-policy" class="object-table">
+ <caption>Internationalised Policy</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>name</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The translated name of the policy.</td>
+ </tr>
+ <tr>
+  <td><code>url</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The URL, which should include the policy ID, version, and language
+in it, to be presented to the user as the policy. URLs should have
+all three criteria to avoid conflicts when the policy is updated
+in the future: for example, if this was &ldquo;<a href="https://example.org/terms.html%22">https://example.org/terms.html&quot;</a>
+then the server would be unable to update it because the client would
+have already added that URL to the <code>m.accepted_terms</code> collection.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;policies&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;privacy_policy&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;en&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Privacy Policy&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;url&#34;</span><span class="p">:</span> <span class="s2">&#34;https://example.org/somewhere/privacy-1.2-en.html&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;fr&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Politique de confidentialité&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;url&#34;</span><span class="p">:</span> <span class="s2">&#34;https://example.org/somewhere/privacy-1.2-fr.html&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="s2">&#34;1.2&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;terms_of_service&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;en&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Terms of Service&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;url&#34;</span><span class="p">:</span> <span class="s2">&#34;https://example.org/somewhere/terms-2.0-en.html&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;fr&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Conditions d&#39;utilisation&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;url&#34;</span><span class="p">:</span> <span class="s2">&#34;https://example.org/somewhere/terms-2.0-fr.html&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="s2">&#34;2.0&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv2terms">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/terms</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Called by a client to indicate that the user has accepted/agreed to the included
+set of URLs. Servers MUST NOT assume that the client will be sending all previously
+accepted URLs and should therefore append the provided URLs to what the server
+already knows has been accepted.</p>
+<p>Clients MUST provide the URL of the policy in the language that was presented
+to the user. Servers SHOULD consider acceptance of any one language&rsquo;s URL as
+acceptance for all other languages of that policy.</p>
+<p>The server should avoid returning <code>M_TERMS_NOT_SIGNED</code> because the client
+may not be accepting all terms at once.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>user_accepts</code></td>
+  <td><code>[string]</code></td>
+  <td>
+    <strong>Required: </strong>The URLs the user is accepting in this request.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;user_accepts&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://example.org/somewhere/terms-2.0-en.html&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The server has considered the user as having accepted the provided URLs.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div></details>
+</section>
+<h2 id="status-check">Status check</h2>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_matrixidentityv2">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_matrix/identity/v2</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Checks that an identity server is available at this API endpoint.</p>
+<p>To discover that an identity server is available at a specific URL,
+this endpoint can be queried and will return an empty object.</p>
+<p>This is primarily used for auto-discovery and health check purposes
+by entities acting as a client for the identity server.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>No</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<p>No request parameters or request body.</p>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>An identity server is ready to serve requests.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div></details>
+</section>
+<h2 id="key-management">Key management</h2>
+<p>An identity server has some long-term public-private keypairs. These are
+named in a scheme <code>algorithm:identifier</code>, e.g. <code>ed25519:0</code>. When signing
+an association, the standard <a href="/appendices#signing-json">Signing
+JSON</a> algorithm applies.</p>
+<p>The identity server may also keep track of some short-term
+public-private keypairs, which may have different usage and lifetime
+characteristics than the service&rsquo;s long-term keys.</p>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_matrixidentityv2pubkeyephemeralisvalid">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_matrix/identity/v2/pubkey/ephemeral/isvalid</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Check whether a short-term public key is valid.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>No</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>query parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>public_key</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The unpadded base64-encoded public key to check.</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The validity of the public key.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>valid</code></td>
+  <td><code>boolean</code></td>
+  <td>
+    <strong>Required: </strong>Whether the public key is recognised and is currently valid.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;valid&#34;</span><span class="p">:</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_matrixidentityv2pubkeyisvalid">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_matrix/identity/v2/pubkey/isvalid</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Check whether a long-term public key is valid. The response should always
+be the same, provided the key exists.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>No</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>query parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>public_key</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The unpadded base64-encoded public key to check.</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The validity of the public key.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>valid</code></td>
+  <td><code>boolean</code></td>
+  <td>
+    <strong>Required: </strong>Whether the public key is recognised and is currently valid.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;valid&#34;</span><span class="p">:</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_matrixidentityv2pubkeykeyid">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_matrix/identity/v2/pubkey/{keyId}</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Get the public key for the passed key ID.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>No</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>keyId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The ID of the key. This should take the form algorithm:identifier
+where algorithm identifies the signing algorithm, and the identifier
+is an opaque string.</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The public key exists.</td>
+ </tr>
+ <tr>
+  <td><code>404</code></td>
+  <td>The public key was not found.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>public_key</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>Unpadded Base64 encoded public key.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;public_key&#34;</span><span class="p">:</span> <span class="s2">&#34;VXuGitF39UH5iRfvbIknlvlAVKgD1BsLDMvBf0pmp7c&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>404 response</h3>
+<table id="_matrixidentityv2pubkeykeyid_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_NOT_FOUND&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;The public key was not found&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h2 id="association-lookup">Association lookup</h2>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_matrixidentityv2hash_details">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_matrix/identity/v2/hash_details</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Gets parameters for hashing identifiers from the server. This can include
+any of the algorithms defined in this specification.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<p>No request parameters or request body.</p>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The hash function information.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>algorithms</code></td>
+  <td><code>[string]</code></td>
+  <td>
+    <strong>Required: </strong>The algorithms the server supports. Must contain at least <code>sha256</code>.</td>
+ </tr>
+ <tr>
+  <td><code>lookup_pepper</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong><p>The pepper the client MUST use in hashing identifiers, and MUST
+supply to the <code>/lookup</code> endpoint when performing lookups.</p>
+<p>Servers SHOULD rotate this string often.</p>
+</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;algorithms&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;none&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;sha256&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;lookup_pepper&#34;</span><span class="p">:</span> <span class="s2">&#34;matrixrocks&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv2lookup">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/lookup</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Looks up the set of Matrix User IDs which have bound the 3PIDs given, if
+bindings are available. Note that the format of the addresses is defined
+later in this specification.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>addresses</code></td>
+  <td><code>[string]</code></td>
+  <td>
+    <strong>Required: </strong><p>The addresses to look up. The format of the entries here depend on
+the <code>algorithm</code> used. Note that queries which have been incorrectly
+hashed or formatted will lead to no matches.</p>
+<p>Note that addresses are case sensitive: review the
+<a href="/appendices#3pid-types">3PID Types</a> to verify the intended case an
+identifier should be prior to submission/hashing.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>algorithm</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The algorithm the client is using to encode the <code>addresses</code>. This
+should be one of the available options from <code>/hash_details</code>.</td>
+ </tr>
+ <tr>
+  <td><code>pepper</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The pepper from <code>/hash_details</code>. This is required even when the
+<code>algorithm</code> does not make use of it.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;addresses&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;4kenr7N9drpCJ4AfalmlGQVsOn3o2RHjkADUpXJWZUc&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;nlo35_T5fzSGZzJApqu8lgIudJvmOQtDaHtr-I4rU7I&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;algorithm&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;pepper&#34;</span><span class="p">:</span> <span class="s2">&#34;matrixrocks&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The associations for any matched <code>addresses</code>.</td>
+ </tr>
+ <tr>
+  <td><code>400</code></td>
+  <td>The client&rsquo;s request was invalid in some way. One possible problem could be the <code>pepper</code> being invalid after the server has rotated it - this is presented with the <code>M_INVALID_PEPPER</code> error code. Clients SHOULD make a call to <code>/hash_details</code> to get a new pepper in this scenario, being careful to avoid retry loops.
+<code>M_INVALID_PARAM</code> can also be returned to indicate the client supplied an <code>algorithm</code> that is unknown to the server.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>mappings</code></td>
+  <td><code>AssociatedMappings</code></td>
+  <td>
+    <strong>Required: </strong>Any applicable mappings of <code>addresses</code> to Matrix User IDs. Addresses
+which do not have associations will not be included, which can make
+this property be an empty object.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mappings&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;4kenr7N9drpCJ4AfalmlGQVsOn3o2RHjkADUpXJWZUc&#34;</span><span class="p">:</span> <span class="s2">&#34;@alice:example.org&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>400 response</h3>
+<table id="_matrixidentityv2lookup_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_INVALID_PEPPER&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Unknown or invalid pepper - has it been rotated?&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="client-behaviour">Client behaviour</h3>
+<p>Prior to performing a lookup clients SHOULD make a request to the
+<code>/hash_details</code> endpoint to determine what algorithms the server
+supports (described in more detail below). The client then uses this
+information to form a <code>/lookup</code> request and receive known bindings from
+the server.</p>
+<p>Clients MUST support at least the <code>sha256</code> algorithm.</p>
+<h3 id="server-behaviour">Server behaviour</h3>
+<p>Servers, upon receipt of a <code>/lookup</code> request, will compare the query
+against known bindings it has, hashing the identifiers it knows about as
+needed to verify exact matches to the request.</p>
+<p>Servers MUST support at least the <code>sha256</code> algorithm.</p>
+<h3 id="algorithms">Algorithms</h3>
+<p>Some algorithms are defined as part of the specification, however other
+formats can be negotiated between the client and server using
+<code>/hash_details</code>.</p>
+<h4 id="sha256"><code>sha256</code></h4>
+<p>This algorithm MUST be supported by clients and servers at a minimum. It
+is additionally the preferred algorithm for lookups.</p>
+<p>When using this algorithm, the client converts the query first into
+strings separated by spaces in the format <code>&lt;address&gt; &lt;medium&gt; &lt;pepper&gt;</code>.
+The <code>&lt;pepper&gt;</code> is retrieved from <code>/hash_details</code>, the <code>&lt;medium&gt;</code> is
+typically <code>email</code> or <code>msisdn</code> (both lowercase), and the <code>&lt;address&gt;</code> is
+the 3PID to search for. For example, if the client wanted to know about
+<code>alice@example.org</code>&rsquo;s bindings, it would first format the query as
+<code>alice@example.org email ThePepperGoesHere</code>.</p>
+<div class="alert rationale " role="alert">
+Mediums and peppers are appended to the address to prevent a common
+prefix for each 3PID, helping prevent attackers from pre-computing the
+internal state of the hash function.
+</div>
+<p>After formatting each query, the string is run through SHA-256 as
+defined by <a href="https://tools.ietf.org/html/rfc4634">RFC 4634</a>. The
+resulting bytes are then encoded using URL-Safe <a href="/appendices#unpadded-base64">Unpadded
+Base64</a> (similar to <a href="/rooms/v4#event-ids">room version
+4&rsquo;s event ID format</a>).</p>
+<p>An example set of queries when using the pepper <code>matrixrocks</code> would be:</p>
+<pre><code>&quot;alice@example.com email matrixrocks&quot; -&gt; &quot;4kenr7N9drpCJ4AfalmlGQVsOn3o2RHjkADUpXJWZUc&quot;
+&quot;bob@example.com email matrixrocks&quot;   -&gt; &quot;LJwSazmv46n0hlMlsb_iYxI0_HXEqy_yj6Jm636cdT8&quot;
+&quot;18005552067 msisdn matrixrocks&quot;      -&gt; &quot;nlo35_T5fzSGZzJApqu8lgIudJvmOQtDaHtr-I4rU7I&quot;
+</code></pre>
+<p>The set of hashes is then given as the <code>addresses</code> array in <code>/lookup</code>.
+Note that the pepper used MUST be supplied as <code>pepper</code> in the <code>/lookup</code>
+request.</p>
+<h4 id="none"><code>none</code></h4>
+<p>This algorithm performs cleartext lookups on the identity server.
+Typically this algorithm should not be used due to the security concerns
+of unhashed identifiers, however some scenarios (such as LDAP-backed
+identity servers) prevent the use of hashed identifiers. Identity
+servers (and optionally clients) can use this algorithm to perform those
+kinds of lookups.</p>
+<p>Similar to the <code>sha256</code> algorithm, the client converts the queries into
+strings separated by spaces in the format <code>&lt;address&gt; &lt;medium&gt;</code> - note
+the lack of <code>&lt;pepper&gt;</code>. For example, if the client wanted to know about
+<code>alice@example.org</code>&rsquo;s bindings, it would format the query as
+<code>alice@example.org email</code>.</p>
+<p>The formatted strings are then given as the <code>addresses</code> in <code>/lookup</code>.
+Note that the <code>pepper</code> is still required, and must be provided to ensure
+the client has made an appropriate request to <code>/hash_details</code> first.</p>
+<h3 id="security-considerations">Security considerations</h3>
+<div class="alert note " role="alert">
+<a href="https://github.com/matrix-org/matrix-spec-proposals/blob/main/proposals/2134-identity-hash-lookup.md">MSC2134</a> has much
+more information about the security considerations made for this section
+of the specification. This section covers the high-level details for why
+the specification is the way it is.
+</div>
+<p>Typically the lookup endpoint is used when a client has an unknown 3PID
+it wants to find a Matrix User ID for. Clients normally do this kind of
+lookup when inviting new users to a room or searching a user&rsquo;s address
+book to find any Matrix users they may not have discovered yet. Rogue or
+malicious identity servers could harvest this unknown information and do
+nefarious things with it if it were sent in plain text. In order to
+protect the privacy of users who might not have a Matrix identifier
+bound to their 3PID addresses, the specification attempts to make it
+difficult to harvest 3PIDs.</p>
+<div class="alert rationale " role="alert">
+<p>Hashing identifiers, while not perfect, helps make the effort required
+to harvest identifiers significantly higher. Phone numbers in particular
+are still difficult to protect with hashing, however hashing is
+objectively better than not.</p>
+<p>An alternative to hashing would be using bcrypt or similar with many
+rounds, however by nature of needing to serve mobile clients and clients
+on limited hardware the solution needs be kept relatively lightweight.</p>
+</div>
+<p>Clients should be cautious of servers not rotating their pepper very
+often, and potentially of servers which use a weak pepper - these
+servers may be attempting to brute force the identifiers or use rainbow
+tables to mine the addresses. Similarly, clients which support the
+<code>none</code> algorithm should consider at least warning the user of the risks
+in sending identifiers in plain text to the identity server.</p>
+<p>Addresses are still potentially reversible using a calculated rainbow
+table given some identifiers, such as phone numbers, common email
+address domains, and leaked addresses are easily calculated. For
+example, phone numbers can have roughly 12 digits to them, making them
+an easier target for attack than email addresses.</p>
+<h2 id="establishing-associations">Establishing associations</h2>
+<p>The flow for creating an association is session-based.</p>
+<p>Within a session, one may prove that one has ownership of a 3PID. Once
+this has been established, the user can form an association between that
+3PID and a Matrix user ID. Note that this association is only proved one
+way; a user can associate <em>any</em> Matrix user ID with a validated 3PID,
+i.e. I can claim that any email address I own is associated with
+@billg:microsoft.com.</p>
+<p>Sessions are time-limited; a session is considered to have been modified
+when it was created, and then when a validation is performed within it.
+A session can only be checked for validation, and validation can only be
+performed within a session, within a 24-hour period since its most
+recent modification. Any attempts to perform these actions after the
+expiry will be rejected, and a new session should be created and used
+instead.</p>
+<p>To start a session, the client makes a request to the appropriate
+<code>/requestToken</code> endpoint. The identity server then sends a validation
+token to the user, and the user provides the token to the client. The
+client then provides the token to the appropriate <code>/submitToken</code>
+endpoint, completing the session. At this point, the client should
+<code>/bind</code> the third-party identifier or leave it for another entity to
+bind.</p>
+<h3 id="format-of-a-validation-token">Format of a validation token</h3>
+<p>The format of the validation token is left up to the identity server: it
+should choose one appropriate to the 3PID type. (For example, it would
+be inappropriate to expect a user to copy a long passphrase including
+punctuation from an SMS message into a client.)</p>
+<p>Whatever format the identity server uses, the validation token must
+consist of at most 255 Unicode codepoints. Clients must pass the token
+through without modification.</p>
+<h3 id="email-associations">Email associations</h3>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv2validateemailrequesttoken">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/validate/email/requestToken</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Create a session for validating an email address.</p>
+<p>The identity server will send an email containing a token. If that
+token is presented to the identity server in the future, it indicates
+that that user was able to read the email for that email address, and
+so we validate ownership of the email address.</p>
+<p>Note that homeservers offer APIs that proxy this API, adding
+additional behaviour on top, for example,
+<code>/register/email/requestToken</code> is designed specifically for use when
+registering an account and therefore will inform the user if the email
+address given is already registered on the server.</p>
+<p>Note: for backwards compatibility with previous drafts of this
+specification, the parameters may also be specified as
+<code>application/x-form-www-urlencoded</code> data.  However, this usage is
+deprecated.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>client_secret</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>A unique string generated by the client, and used to identify the
+validation attempt. It must be a string consisting of the characters
+<code>[0-9a-zA-Z.=_-]</code>. Its length must not exceed 255 characters and it
+must not be empty.</td>
+ </tr>
+ <tr>
+  <td><code>email</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The email address to validate.</td>
+ </tr>
+ <tr>
+  <td><code>next_link</code></td>
+  <td><code>string</code></td>
+  <td>
+    Optional. When the validation is completed, the identity server will
+redirect the user to this URL. This option is ignored when submitting
+3PID validation information through a POST request.</td>
+ </tr>
+ <tr>
+  <td><code>send_attempt</code></td>
+  <td><code>integer</code></td>
+  <td>
+    <strong>Required: </strong>The server will only send an email if the <code>send_attempt</code>
+is a number greater than the most recent one which it has seen,
+scoped to that <code>email</code> + <code>client_secret</code> pair. This is to
+avoid repeatedly sending the same email in the case of request
+retries between the POSTing user and the identity server.
+The client should increment this value if they desire a new
+email (e.g. a reminder) to be sent. If they do not, the server
+should respond with success but not resend the email.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;client_secret&#34;</span><span class="p">:</span> <span class="s2">&#34;monkeys_are_GREAT&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;email&#34;</span><span class="p">:</span> <span class="s2">&#34;alice@example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;next_link&#34;</span><span class="p">:</span> <span class="s2">&#34;https://example.org/congratulations.html&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;send_attempt&#34;</span><span class="p">:</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>Session created.</td>
+ </tr>
+ <tr>
+  <td><code>400</code></td>
+  <td><p>An error occurred.  Some possible errors are:</p>
+<ul>
+<li><code>M_INVALID_EMAIL</code>: The email address provided was invalid.</li>
+<li><code>M_EMAIL_SEND_ERROR</code>: The validation email could not be sent.</li>
+</ul>
+</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>sid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The session ID. Session IDs are opaque strings generated by the identity
+server. They must consist entirely of the characters
+<code>[0-9a-zA-Z.=_-]</code>. Their length must not exceed 255 characters and they
+must not be empty.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;sid&#34;</span><span class="p">:</span> <span class="s2">&#34;123abc&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>400 response</h3>
+<table id="_matrixidentityv2validateemailrequesttoken_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_INVALID_EMAIL&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;The email address is not valid&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_matrixidentityv2validateemailrequesttoken_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_matrixidentityv2validateemailsubmittoken">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_matrix/identity/v2/validate/email/submitToken</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Validate ownership of an email address.</p>
+<p>If the three parameters are consistent with a set generated by a
+<code>requestToken</code> call, ownership of the email address is considered to
+have been validated. This does not publish any information publicly, or
+associate the email address with any Matrix user ID. Specifically,
+calls to <code>/lookup</code> will not show a binding.</p>
+<p>Note that, in contrast with the POST version, this endpoint will be
+used by end-users, and so the response should be human-readable.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>query parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>client_secret</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The client secret that was supplied to the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>sid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The session ID, generated by the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The token generated by the <code>requestToken</code> call and emailed to the user.</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>Email address is validated.</td>
+ </tr>
+ <tr>
+  <td><code>3XX</code></td>
+  <td>Email address is validated, and the <code>next_link</code> parameter was
+provided to the <code>requestToken</code> call.  The user must be redirected
+to the URL provided by the <code>next_link</code> parameter.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+ <tr>
+  <td><code>4XX</code></td>
+  <td>Validation failed.</td>
+ </tr>
+</table>
+<h3>403 response</h3>
+<table id="_matrixidentityv2validateemailsubmittoken_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv2validateemailsubmittoken">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/validate/email/submitToken</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Validate ownership of an email address.</p>
+<p>If the three parameters are consistent with a set generated by a
+<code>requestToken</code> call, ownership of the email address is considered to
+have been validated. This does not publish any information publicly, or
+associate the email address with any Matrix user ID. Specifically,
+calls to <code>/lookup</code> will not show a binding.</p>
+<p>The identity server is free to match the token case-insensitively, or
+carry out other mapping operations such as unicode
+normalisation. Whether to do so is an implementation detail for the
+identity server. Clients must always pass on the token without
+modification.</p>
+<p>Note: for backwards compatibility with previous drafts of this
+specification, the parameters may also be specified as
+<code>application/x-form-www-urlencoded</code> data.  However, this usage is
+deprecated.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>client_secret</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The client secret that was supplied to the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>sid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The session ID, generated by the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The token generated by the <code>requestToken</code> call and emailed to the user.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;client_secret&#34;</span><span class="p">:</span> <span class="s2">&#34;monkeys_are_GREAT&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;sid&#34;</span><span class="p">:</span> <span class="s2">&#34;1234&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;token&#34;</span><span class="p">:</span> <span class="s2">&#34;atoken&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The success of the validation.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>success</code></td>
+  <td><code>boolean</code></td>
+  <td>
+    <strong>Required: </strong>Whether the validation was successful or not.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;success&#34;</span><span class="p">:</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_matrixidentityv2validateemailsubmittoken_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="phone-number-associations">Phone number associations</h3>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv2validatemsisdnrequesttoken">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/validate/msisdn/requestToken</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Create a session for validating a phone number.</p>
+<p>The identity server will send an SMS message containing a token. If
+that token is presented to the identity server in the future, it
+indicates that that user was able to read the SMS for that phone
+number, and so we validate ownership of the phone number.</p>
+<p>Note that homeservers offer APIs that proxy this API, adding
+additional behaviour on top, for example,
+<code>/register/msisdn/requestToken</code> is designed specifically for use when
+registering an account and therefore will inform the user if the phone
+number given is already registered on the server.</p>
+<p>Note: for backwards compatibility with previous drafts of this
+specification, the parameters may also be specified as
+<code>application/x-form-www-urlencoded</code> data. However, this usage is
+deprecated.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>client_secret</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>A unique string generated by the client, and used to identify the
+validation attempt. It must be a string consisting of the characters
+<code>[0-9a-zA-Z.=_-]</code>. Its length must not exceed 255 characters and it
+must not be empty.</td>
+ </tr>
+ <tr>
+  <td><code>country</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The two-letter uppercase ISO-3166-1 alpha-2 country code that the
+number in <code>phone_number</code> should be parsed as if it were dialled from.</td>
+ </tr>
+ <tr>
+  <td><code>next_link</code></td>
+  <td><code>string</code></td>
+  <td>
+    Optional. When the validation is completed, the identity server will
+redirect the user to this URL. This option is ignored when submitting
+3PID validation information through a POST request.</td>
+ </tr>
+ <tr>
+  <td><code>phone_number</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The phone number to validate.</td>
+ </tr>
+ <tr>
+  <td><code>send_attempt</code></td>
+  <td><code>integer</code></td>
+  <td>
+    <strong>Required: </strong>The server will only send an SMS if the <code>send_attempt</code> is a
+number greater than the most recent one which it has seen,
+scoped to that <code>country</code> + <code>phone_number</code> + <code>client_secret</code>
+triple. This is to avoid repeatedly sending the same SMS in
+the case of request retries between the POSTing user and the
+identity server. The client should increment this value if
+they desire a new SMS (e.g. a reminder) to be sent.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;client_secret&#34;</span><span class="p">:</span> <span class="s2">&#34;monkeys_are_GREAT&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;country&#34;</span><span class="p">:</span> <span class="s2">&#34;GB&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;next_link&#34;</span><span class="p">:</span> <span class="s2">&#34;https://example.org/congratulations.html&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;phone_number&#34;</span><span class="p">:</span> <span class="s2">&#34;07700900001&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;send_attempt&#34;</span><span class="p">:</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>Session created.</td>
+ </tr>
+ <tr>
+  <td><code>400</code></td>
+  <td><p>An error occurred. Some possible errors are:</p>
+<ul>
+<li><code>M_INVALID_ADDRESS</code>: The phone number provided was invalid.</li>
+<li><code>M_SEND_ERROR</code>: The validation SMS could not be sent.</li>
+<li><code>M_DESTINATION_REJECTED</code>: The identity server cannot deliver an
+SMS to the provided country or region.</li>
+</ul>
+</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>sid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The session ID. Session IDs are opaque strings generated by the identity
+server. They must consist entirely of the characters
+<code>[0-9a-zA-Z.=_-]</code>. Their length must not exceed 255 characters and they
+must not be empty.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;sid&#34;</span><span class="p">:</span> <span class="s2">&#34;123abc&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>400 response</h3>
+<table id="_matrixidentityv2validatemsisdnrequesttoken_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_INVALID_ADDRESS&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;The phone number is not valid&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_matrixidentityv2validatemsisdnrequesttoken_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_matrixidentityv2validatemsisdnsubmittoken">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_matrix/identity/v2/validate/msisdn/submitToken</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Validate ownership of a phone number.</p>
+<p>If the three parameters are consistent with a set generated by a
+<code>requestToken</code> call, ownership of the phone number address is
+considered to have been validated. This does not publish any
+information publicly, or associate the phone number with any Matrix
+user ID. Specifically, calls to <code>/lookup</code> will not show a binding.</p>
+<p>Note that, in contrast with the POST version, this endpoint will be
+used by end-users, and so the response should be human-readable.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>query parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>client_secret</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The client secret that was supplied to the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>sid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The session ID, generated by the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The token generated by the <code>requestToken</code> call and sent to the user.</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>Phone number is validated.</td>
+ </tr>
+ <tr>
+  <td><code>3XX</code></td>
+  <td>Phone number address is validated, and the <code>next_link</code> parameter
+was provided to the <code>requestToken</code> call. The user must be
+redirected to the URL provided by the <code>next_link</code> parameter.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+ <tr>
+  <td><code>4XX</code></td>
+  <td>Validation failed.</td>
+ </tr>
+</table>
+<h3>403 response</h3>
+<table id="_matrixidentityv2validatemsisdnsubmittoken_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv2validatemsisdnsubmittoken">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/validate/msisdn/submitToken</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Validate ownership of a phone number.</p>
+<p>If the three parameters are consistent with a set generated by a
+<code>requestToken</code> call, ownership of the phone number is considered to
+have been validated. This does not publish any information publicly, or
+associate the phone number address with any Matrix user
+ID. Specifically, calls to <code>/lookup</code> will not show a binding.</p>
+<p>The identity server is free to match the token case-insensitively, or
+carry out other mapping operations such as unicode
+normalisation. Whether to do so is an implementation detail for the
+identity server. Clients must always pass on the token without
+modification.</p>
+<p>Note: for backwards compatibility with previous drafts of this
+specification, the parameters may also be specified as
+<code>application/x-form-www-urlencoded</code> data. However, this usage is
+deprecated.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>client_secret</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The client secret that was supplied to the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>sid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The session ID, generated by the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The token generated by the <code>requestToken</code> call and sent to the user.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;client_secret&#34;</span><span class="p">:</span> <span class="s2">&#34;monkeys_are_GREAT&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;sid&#34;</span><span class="p">:</span> <span class="s2">&#34;1234&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;token&#34;</span><span class="p">:</span> <span class="s2">&#34;atoken&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The success of the validation.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>success</code></td>
+  <td><code>boolean</code></td>
+  <td>
+    <strong>Required: </strong>Whether the validation was successful or not.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;success&#34;</span><span class="p">:</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_matrixidentityv2validatemsisdnsubmittoken_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="general">General</h3>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv23pidbind">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/3pid/bind</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Publish an association between a session and a Matrix user ID.</p>
+<p>Future calls to <code>/lookup</code> for any of the session's 3pids will return
+this association.</p>
+<p>Note: for backwards compatibility with previous drafts of this
+specification, the parameters may also be specified as
+<code>application/x-form-www-urlencoded</code> data.  However, this usage is
+deprecated.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>client_secret</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The client secret passed to the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>mxid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The Matrix user ID to associate with the 3pids.</td>
+ </tr>
+ <tr>
+  <td><code>sid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The Session ID generated by the <code>requestToken</code> call.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;client_secret&#34;</span><span class="p">:</span> <span class="s2">&#34;monkeys_are_GREAT&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mxid&#34;</span><span class="p">:</span> <span class="s2">&#34;@ears:matrix.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;sid&#34;</span><span class="p">:</span> <span class="s2">&#34;1234&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The association was published.</td>
+ </tr>
+ <tr>
+  <td><code>400</code></td>
+  <td><p>The association was not published.</p>
+<p>If the session has not been validated, then <code>errcode</code> will be
+<code>M_SESSION_NOT_VALIDATED</code>.  If the session has timed out, then
+<code>errcode</code> will be <code>M_SESSION_EXPIRED</code>.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+ <tr>
+  <td><code>404</code></td>
+  <td>The Session ID or client secret were not found</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>address</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The 3pid address of the user being looked up.</td>
+ </tr>
+ <tr>
+  <td><code>medium</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The medium type of the 3pid.</td>
+ </tr>
+ <tr>
+  <td><code>mxid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The Matrix user ID associated with the 3pid.</td>
+ </tr>
+ <tr>
+  <td><code>not_after</code></td>
+  <td><code>integer</code></td>
+  <td>
+    <strong>Required: </strong>A unix timestamp after which the association is not known to be valid.</td>
+ </tr>
+ <tr>
+  <td><code>not_before</code></td>
+  <td><code>integer</code></td>
+  <td>
+    <strong>Required: </strong>A unix timestamp before which the association is not known to be valid.</td>
+ </tr>
+ <tr>
+  <td><code>signatures</code></td>
+  <td><code>{string: Server Signatures}</code></td>
+  <td>
+    <strong>Required: </strong>The signatures of the verifying identity servers which show that the
+association should be trusted, if you trust the verifying identity
+services.</td>
+ </tr>
+ <tr>
+  <td><code>ts</code></td>
+  <td><code>integer</code></td>
+  <td>
+    <strong>Required: </strong>The unix timestamp at which the association was verified.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;address&#34;</span><span class="p">:</span> <span class="s2">&#34;louise@bobs.burgers&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;medium&#34;</span><span class="p">:</span> <span class="s2">&#34;email&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mxid&#34;</span><span class="p">:</span> <span class="s2">&#34;@ears:matrix.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;not_after&#34;</span><span class="p">:</span> <span class="mi">4582425849161</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;not_before&#34;</span><span class="p">:</span> <span class="mi">1428825849161</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;signatures&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;matrix.org&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;ed25519:0&#34;</span><span class="p">:</span> <span class="s2">&#34;ENiU2YORYUJgE6WBMitU0mppbQjidDLanAusj8XS2nVRHPu+0t42OKA/r6zV6i2MzUbNQ3c3MiLScJuSsOiVDQ&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;ts&#34;</span><span class="p">:</span> <span class="mi">1428825849161</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>400 response</h3>
+<table id="_matrixidentityv23pidbind_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_SESSION_NOT_VALIDATED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;This validation session has not yet been completed&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_matrixidentityv23pidbind_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>404 response</h3>
+<table id="_matrixidentityv23pidbind_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_NO_VALID_SESSION&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;No valid session was found matching that sid and client secret&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_matrixidentityv23pidgetvalidated3pid">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_matrix/identity/v2/3pid/getValidated3pid</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Determines if a given 3pid has been validated by a user.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>query parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>client_secret</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The client secret passed to the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>sid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The Session ID generated by the <code>requestToken</code> call.</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>Validation information for the session.</td>
+ </tr>
+ <tr>
+  <td><code>400</code></td>
+  <td><p>The session has not been validated.</p>
+<p>If the session has not been validated, then <code>errcode</code> will be
+<code>M_SESSION_NOT_VALIDATED</code>.  If the session has timed out, then
+<code>errcode</code> will be <code>M_SESSION_EXPIRED</code>.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+ <tr>
+  <td><code>404</code></td>
+  <td>The Session ID or client secret were not found.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>address</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The address of the 3pid being looked up.</td>
+ </tr>
+ <tr>
+  <td><code>medium</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The medium type of the 3pid.</td>
+ </tr>
+ <tr>
+  <td><code>validated_at</code></td>
+  <td><code>integer</code></td>
+  <td>
+    <strong>Required: </strong>Timestamp, in milliseconds, indicating the time that the 3pid
+was validated.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;address&#34;</span><span class="p">:</span> <span class="s2">&#34;louise@bobs.burgers&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;medium&#34;</span><span class="p">:</span> <span class="s2">&#34;email&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;validated_at&#34;</span><span class="p">:</span> <span class="mi">1457622739026</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>400 response</h3>
+<table id="_matrixidentityv23pidgetvalidated3pid_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_SESSION_NOT_VALIDATED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;This validation session has not yet been completed&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_matrixidentityv23pidgetvalidated3pid_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>404 response</h3>
+<table id="_matrixidentityv23pidgetvalidated3pid_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_NO_VALID_SESSION&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;No valid session was found matching that sid and client secret&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv23pidunbind">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/3pid/unbind</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Remove an association between a session and a Matrix user ID.</p>
+<p>Future calls to <code>/lookup</code> for any of the session&rsquo;s 3pids will not
+return the removed association.</p>
+<p>The identity server should authenticate the request in one of two
+ways:</p>
+<ol>
+<li>The request is signed by the homeserver which controls the <code>user_id</code>.</li>
+<li>The request includes the <code>sid</code> and <code>client_secret</code> parameters,
+as per <code>/3pid/bind</code>, which proves ownership of the 3PID.</li>
+</ol>
+<p>If this endpoint returns a JSON Matrix error, that error should be passed
+through to the client requesting an unbind through a homeserver, if the
+homeserver is acting on behalf of a client.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>client_secret</code></td>
+  <td><code>string</code></td>
+  <td>
+    The client secret passed to the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>mxid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The Matrix user ID to remove from the 3pids.</td>
+ </tr>
+ <tr>
+  <td><code>sid</code></td>
+  <td><code>string</code></td>
+  <td>
+    The Session ID generated by the <code>requestToken</code> call.</td>
+ </tr>
+ <tr>
+  <td><code>threepid</code></td>
+  <td><code>3PID</code></td>
+  <td>
+    <strong>Required: </strong>The 3PID to remove. Must match the 3PID used to generate the session
+if using <code>sid</code> and <code>client_secret</code> to authenticate this request.</td>
+ </tr>
+</table>
+<table id="_matrixidentityv23pidunbind_3pid" class="object-table">
+ <caption>3PID</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>address</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The 3PID address to remove.</td>
+ </tr>
+ <tr>
+  <td><code>medium</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>A medium from the <a href="/appendices/#3pid-types">3PID Types</a> Appendix, matching the medium
+of the identifier to unbind.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;client_secret&#34;</span><span class="p">:</span> <span class="s2">&#34;monkeys_are_GREAT&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mxid&#34;</span><span class="p">:</span> <span class="s2">&#34;@ears:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;sid&#34;</span><span class="p">:</span> <span class="s2">&#34;1234&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;threepid&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;address&#34;</span><span class="p">:</span> <span class="s2">&#34;monkeys_have_ears@example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;medium&#34;</span><span class="p">:</span> <span class="s2">&#34;email&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The association was successfully removed.</td>
+ </tr>
+ <tr>
+  <td><code>400</code></td>
+  <td>If the response body is not a JSON Matrix error, the identity server
+does not support unbinds. If a JSON Matrix error is in the response
+body, the requesting party should respect the error.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td><p>The credentials supplied to authenticate the request were invalid.
+This may also be returned if the identity server does not support
+the chosen authentication method (such as blocking homeservers from
+unbinding identifiers).</p>
+<p>Another common error code is <code>M_TERMS_NOT_SIGNED</code> where the user
+needs to <a href="/identity-service-api/#terms-of-service">agree to more terms</a> in order to continue.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>404</code></td>
+  <td>If the response body is not a JSON Matrix error, the identity server
+does not support unbinds. If a JSON Matrix error is in the response
+body, the requesting party should respect the error.</td>
+ </tr>
+ <tr>
+  <td><code>501</code></td>
+  <td>If the response body is not a JSON Matrix error, the identity server
+does not support unbinds. If a JSON Matrix error is in the response
+body, the requesting party should respect the error.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_matrixidentityv23pidunbind_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_FORBIDDEN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Invalid homeserver signature&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h2 id="invitation-storage">Invitation storage</h2>
+<p>An identity server can store pending invitations to a user&rsquo;s 3PID, which
+will be retrieved and can be either notified on or look up when the 3PID
+is associated with a Matrix user ID.</p>
+<p>At a later point, if the owner of that particular 3PID binds it with a
+Matrix user ID, the identity server will attempt to make an HTTP POST to
+the Matrix user&rsquo;s homeserver via the
+<a href="/server-server-api#put_matrixfederationv13pidonbind">/3pid/onbind</a>
+endpoint. The request MUST be signed with a long-term private key for
+the identity server.</p>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv2store-invite">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/store-invite</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Store pending invitations to a user&rsquo;s 3pid.</p>
+<p>In addition to the request parameters specified below, an arbitrary
+number of other parameters may also be specified. These may be used in
+the invite message generation described below.</p>
+<p>The service will generate a random token and an ephemeral key used for
+accepting the invite.</p>
+<p>The service also generates a <code>display_name</code> for the inviter, which is
+a redacted version of <code>address</code> which does not leak the full contents
+of the <code>address</code>.</p>
+<p>The service records persistently all of the above information.</p>
+<p>It also generates an email containing all of this data, sent to the
+<code>address</code> parameter, notifying them of the invitation. The email should
+reference the <code>inviter_name</code>, <code>room_name</code>, <code>room_avatar</code>, and <code>room_type</code>
+(if present) from the request here.</p>
+<p>Also, the generated ephemeral public key will be listed as valid on
+requests to <code>/_matrix/identity/v2/pubkey/ephemeral/isvalid</code>.</p>
+<p>Currently, invites may only be issued for 3pids of the <code>email</code> medium.</p>
+<p>Optional fields in the request should be populated to the best of the
+server&rsquo;s ability. Identity servers may use these variables when notifying
+the <code>address</code> of the pending invite for display purposes.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>address</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The email address of the invited user.</td>
+ </tr>
+ <tr>
+  <td><code>medium</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The literal string <code>email</code>.</td>
+ </tr>
+ <tr>
+  <td><code>room_alias</code></td>
+  <td><code>string</code></td>
+  <td>
+    The Matrix room alias for the room to which the user is
+invited. This should be retrieved from the <code>m.room.canonical_alias</code>
+state event.</td>
+ </tr>
+ <tr>
+  <td><code>room_avatar_url</code></td>
+  <td><code>string</code></td>
+  <td>
+    The Content URI for the room to which the user is invited. This should
+be retrieved from the <code>m.room.avatar</code> state event.</td>
+ </tr>
+ <tr>
+  <td><code>room_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The Matrix room ID to which the user is invited</td>
+ </tr>
+ <tr>
+  <td><code>room_join_rules</code></td>
+  <td><code>string</code></td>
+  <td>
+    The <code>join_rule</code> for the room to which the user is invited. This should
+be retrieved from the <code>m.room.join_rules</code> state event.</td>
+ </tr>
+ <tr>
+  <td><code>room_name</code></td>
+  <td><code>string</code></td>
+  <td>
+    The name of the room to which the user is invited. This should be retrieved
+from the <code>m.room.name</code> state event.</td>
+ </tr>
+ <tr>
+  <td><code>room_type</code></td>
+  <td><code>string</code></td>
+  <td>
+    The <code>type</code> from the <code>m.room.create</code> event&rsquo;s <code>content</code>. If the create event doesn&rsquo;t
+have a specified <code>type</code>, this field is not included.</td>
+ </tr>
+ <tr>
+  <td><code>sender</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The Matrix user ID of the inviting user</td>
+ </tr>
+ <tr>
+  <td><code>sender_avatar_url</code></td>
+  <td><code>string</code></td>
+  <td>
+    The Content URI for the avatar of the user ID initiating the invite.</td>
+ </tr>
+ <tr>
+  <td><code>sender_display_name</code></td>
+  <td><code>string</code></td>
+  <td>
+    The display name of the user ID initiating the invite.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;address&#34;</span><span class="p">:</span> <span class="s2">&#34;foo@example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;medium&#34;</span><span class="p">:</span> <span class="s2">&#34;email&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;room_alias&#34;</span><span class="p">:</span> <span class="s2">&#34;#somewhere:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;room_avatar_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://example.org/s0meM3dia&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;room_id&#34;</span><span class="p">:</span> <span class="s2">&#34;!something:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;room_join_rules&#34;</span><span class="p">:</span> <span class="s2">&#34;public&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;room_name&#34;</span><span class="p">:</span> <span class="s2">&#34;Bob&#39;s Emporium of Messages&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;room_type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.space&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@bob:example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;sender_avatar_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://example.org/an0th3rM3dia&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;sender_display_name&#34;</span><span class="p">:</span> <span class="s2">&#34;Bob Smith&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The invitation was stored.</td>
+ </tr>
+ <tr>
+  <td><code>400</code></td>
+  <td><p>An error has occurred.</p>
+<p>If the 3pid is already bound to a Matrix user ID, the error code
+will be <code>M_THREEPID_IN_USE</code>.  If the medium is unsupported, the
+error code will be <code>M_UNRECOGNIZED</code>.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>display_name</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The generated (redacted) display name.</td>
+ </tr>
+ <tr>
+  <td><code>public_keys</code></td>
+  <td><code>[PublicKey]</code></td>
+  <td>
+    <strong>Required: </strong>A list of [server&rsquo;s long-term public key, generated ephemeral
+public key].</td>
+ </tr>
+ <tr>
+  <td><code>token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The generated token. Must be a string consisting of the
+characters <code>[0-9a-zA-Z.=_-]</code>. Its length must not exceed
+255 characters and it must not be empty.</td>
+ </tr>
+</table>
+<table id="_matrixidentityv2store-invite_publickey" class="object-table">
+ <caption>PublicKey</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>key_validity_url</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The URI of an endpoint where the validity of this key can be checked
+by passing it as a <code>public_key</code> query parameter. See
+<a href="/identity-service-api/#key-management">key management</a>.</td>
+ </tr>
+ <tr>
+  <td><code>public_key</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The public key, encoded using <a href="/appendices/#unpadded-base64">unpadded Base64</a>.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;display_name&#34;</span><span class="p">:</span> <span class="s2">&#34;f...@b...&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;public_keys&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;key_validity_url&#34;</span><span class="p">:</span> <span class="s2">&#34;https://example.com/_matrix/identity/v2/pubkey/isvalid&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;public_key&#34;</span><span class="p">:</span> <span class="s2">&#34;serverPublicKeyBase64&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;key_validity_url&#34;</span><span class="p">:</span> <span class="s2">&#34;https://example.com/_matrix/identity/v2/pubkey/ephemeral/isvalid&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;public_key&#34;</span><span class="p">:</span> <span class="s2">&#34;ephemeralPublicKeyBase64&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;token&#34;</span><span class="p">:</span> <span class="s2">&#34;sometoken&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>400 response</h3>
+<table id="_matrixidentityv2store-invite_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_THREEPID_IN_USE&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Binding already known&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mxid&#34;</span><span class="p">:</span> <span class="s2">&#34;@alice:example.com&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_matrixidentityv2store-invite_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h2 id="ephemeral-invitation-signing">Ephemeral invitation signing</h2>
+<p>To aid clients who may not be able to perform crypto themselves, the
+identity server offers some crypto functionality to help in accepting
+invitations. This is less secure than the client doing it itself, but
+may be useful where this isn&rsquo;t possible.</p>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_matrixidentityv2sign-ed25519">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_matrix/identity/v2/sign-ed25519</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Sign invitation details.</p>
+<p>The identity server will look up <code>token</code> which was stored in a call
+to <code>store-invite</code>, and fetch the sender of the invite.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>mxid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The Matrix user ID of the user accepting the invitation.</td>
+ </tr>
+ <tr>
+  <td><code>private_key</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The private key, encoded as <a href="/appendices/#unpadded-base64">Unpadded base64</a>.</td>
+ </tr>
+ <tr>
+  <td><code>token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The token from the call to <code>store-invite</code>.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mxid&#34;</span><span class="p">:</span> <span class="s2">&#34;@foo:bar.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;private_key&#34;</span><span class="p">:</span> <span class="s2">&#34;base64encodedkey&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;token&#34;</span><span class="p">:</span> <span class="s2">&#34;sometoken&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The signed JSON of the mxid, sender, and token.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The user must do something in order to use this endpoint. One example
+is an <code>M_TERMS_NOT_SIGNED</code> error where the user must <a href="/identity-service-api/#terms-of-service">agree to more terms</a>.</td>
+ </tr>
+ <tr>
+  <td><code>404</code></td>
+  <td>The token was not found.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>mxid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The Matrix user ID of the user accepting the invitation.</td>
+ </tr>
+ <tr>
+  <td><code>sender</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The Matrix user ID of the user who sent the invitation.</td>
+ </tr>
+ <tr>
+  <td><code>signatures</code></td>
+  <td><code>{string: Server Signatures}</code></td>
+  <td>
+    <strong>Required: </strong>The signature of the mxid, sender, and token.</td>
+ </tr>
+ <tr>
+  <td><code>token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The token for the invitation.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mxid&#34;</span><span class="p">:</span> <span class="s2">&#34;@foo:bar.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@baz:bar.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;signatures&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;my.id.server&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;ed25519:0&#34;</span><span class="p">:</span> <span class="s2">&#34;def987&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;token&#34;</span><span class="p">:</span> <span class="s2">&#34;abc123&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_matrixidentityv2sign-ed25519_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_TERMS_NOT_SIGNED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Please accept our updated terms of service before continuing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>404 response</h3>
+<table id="_matrixidentityv2sign-ed25519_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_UNRECOGNIZED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Didn&#39;t recognize token&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+
+</div>
+
+
+          </main>
+        </div>
+      </div>
+      
+
+
+<footer class="py-5 row d-print-none">
+  <div class="container-fluid mx-sm-5">
+    <div class="row">
+      <div class="col-12 text-center text-xs-center order-sm-3">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="GitHub" aria-label="GitHub">
+    <a class="text-dark" target="_blank" rel="noopener noreferrer" href="https://github.com/matrix-org">
+      <i class="fab fa-github"></i>
+    </a>
+  </li>
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="GitLab" aria-label="GitLab">
+    <a class="text-dark" target="_blank" rel="noopener noreferrer" href="https://gitlab.matrix.org/matrix-org">
+      <i class="fab fa-gitlab"></i>
+    </a>
+  </li>
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="YouTube" aria-label="YouTube">
+    <a class="text-dark" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/channel/UCVFkW-chclhuyYRbmmfwt6w">
+      <i class="fab fa-youtube"></i>
+    </a>
+  </li>
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="Twitter" aria-label="Twitter">
+    <a class="text-dark" target="_blank" rel="noopener noreferrer" href="https://twitter.com/matrixdotorg">
+      <i class="fab fa-twitter"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 text-center py-2 order-sm-3">
+        <small>&copy; 2023 The Matrix.org Foundation CIC</small>
+	
+		
+	
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </div>
+    
+
+<script src="/js/main.min.be25a680a0d95dc8b5d6664622e2134aa894220e2f224ef609e00f633a3a1b32.js" integrity="sha256-viWmgKDZXci11mZGIuITSqiUIg4vIk72CeAPYzo6GzI=" crossorigin="anonymous"></script>
+<script src='/js/tabpane-persist.js'></script>
+
+
+<script defer language="javascript" type="text/javascript"  src="/js/toc.js"></script>
+
+  </body>
+</html>

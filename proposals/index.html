@@ -1,0 +1,852 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.119.0">
+<meta name="robots" content="index, follow">
+
+
+<link rel="shortcut icon" href="/favicons/favicon.ico" >
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon-180x180.png" sizes="180x180">
+<link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicons/android-36x36.png" sizes="36x36">
+<link rel="icon" type="image/png" href="/favicons/android-48x48.png" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicons/android-72x72.png" sizes="72x72">
+<link rel="icon" type="image/png" href="/favicons/android-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicons/android-144x144.png" sizes="144x144">
+<link rel="icon" type="image/png" href="/favicons/android-192x192.png" sizes="192x192">
+
+<title>Spec Change Proposals | Matrix Specification</title>
+<meta name="description" content="If you are interested in submitting a change to the Matrix Specification, please take note of the following guidelines.
+Most changes to the Specification require a formal proposal. Bug fixes, typos, and clarifications to existing behaviour do not need proposals - see the contributing guide for more information on what does and does not need a proposal.
+The proposal process involves some technical writing, having it reviewed by everyone, having the proposal being accepted, then actually having your ideas implemented as committed changes to the Specification repository.">
+<meta property="og:title" content="Spec Change Proposals" />
+<meta property="og:description" content="If you are interested in submitting a change to the Matrix Specification, please take note of the following guidelines.
+Most changes to the Specification require a formal proposal. Bug fixes, typos, and clarifications to existing behaviour do not need proposals - see the contributing guide for more information on what does and does not need a proposal.
+The proposal process involves some technical writing, having it reviewed by everyone, having the proposal being accepted, then actually having your ideas implemented as committed changes to the Specification repository." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/proposals/" /><meta property="article:section" content="" />
+
+
+<meta itemprop="name" content="Spec Change Proposals">
+<meta itemprop="description" content="If you are interested in submitting a change to the Matrix Specification, please take note of the following guidelines.
+Most changes to the Specification require a formal proposal. Bug fixes, typos, and clarifications to existing behaviour do not need proposals - see the contributing guide for more information on what does and does not need a proposal.
+The proposal process involves some technical writing, having it reviewed by everyone, having the proposal being accepted, then actually having your ideas implemented as committed changes to the Specification repository.">
+
+<meta itemprop="wordCount" content="4003">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Spec Change Proposals"/>
+<meta name="twitter:description" content="If you are interested in submitting a change to the Matrix Specification, please take note of the following guidelines.
+Most changes to the Specification require a formal proposal. Bug fixes, typos, and clarifications to existing behaviour do not need proposals - see the contributing guide for more information on what does and does not need a proposal.
+The proposal process involves some technical writing, having it reviewed by everyone, having the proposal being accepted, then actually having your ideas implemented as committed changes to the Specification repository."/>
+
+
+
+
+<link rel="preload" href="/scss/main.min.af4c3a756149c6e6a38a514505696051afd07c3cc0ac1bb64498d5cd0c8f613b.css" as="style">
+<link href="/scss/main.min.af4c3a756149c6e6a38a514505696051afd07c3cc0ac1bb64498d5cd0c8f613b.css" rel="stylesheet" integrity="">
+
+<script
+  src="/js/jquery-3.6.0.min.js"
+  integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK">
+</script>
+
+
+
+<link rel="preload" href="/css/fonts/Inter.css" as="style">
+<link rel="stylesheet" href="/css/fonts/Inter.css">
+
+
+
+
+<link rel="preload" href="/scss/custom.min.e7010c4aa0015f690b91b7b50c35f1a5f21ea69d2fe93db6b124deb2722a2dcf.css" as="style">
+<link href="/scss/custom.min.e7010c4aa0015f690b91b7b50c35f1a5f21ea69d2fe93db6b124deb2722a2dcf.css" rel="stylesheet" integrity="">
+
+
+  </head>
+  <body class="td-page">
+    <header>
+      
+
+
+<nav class="js-navbar-scroll navbar navbar-expand navbar-light flex-column flex-md-row td-navbar">
+        <a class="navbar-brand" href="/">
+		<span class="navbar-logo"><svg width="75" height="32" xmlns="http://www.w3.org/2000/svg"><g fill="#000" fill-rule="nonzero"><path d="M.936.732V31.25H3.13v.732H.095V0h3.034v.732zm8.45 9.675v1.544h.044a4.461 4.461.0 011.487-1.368c.58-.323 1.245-.485 1.993-.485.72.0 1.377.14 1.972.42.595.279 1.047.771 1.355 1.477.338-.5.796-.941 1.377-1.323.58-.383 1.266-.574 2.06-.574.602.0 1.16.074 1.674.22.514.148.954.383 1.322.707.366.323.653.746.859 1.268.205.522.308 1.15.308 1.887v7.633H20.71v-6.464c0-.383-.015-.743-.044-1.082a2.305 2.305.0 00-.242-.882 1.473 1.473.0 00-.584-.596c-.257-.146-.606-.22-1.047-.22-.44.0-.796.085-1.068.253-.272.17-.485.39-.639.662a2.654 2.654.0 00-.308.927 7.074 7.074.0 00-.078 1.048v6.354h-3.128v-6.398c0-.338-.007-.673-.021-1.004a2.825 2.825.0 00-.188-.916 1.411 1.411.0 00-.55-.673c-.258-.168-.636-.253-1.135-.253a2.33 2.33.0 00-.584.1 1.94 1.94.0 00-.705.374c-.228.184-.422.449-.584.794-.161.346-.242.798-.242 1.357v6.619H6.434V10.407h2.952zm16.456 1.677a3.751 3.751.0 011.233-1.17 5.37 5.37.0 011.685-.629 9.579 9.579.0 011.884-.187c.573.0 1.153.04 1.74.121.588.081 1.124.24 1.609.475.484.235.88.562 1.19.981.308.42.462.975.462 1.666v5.934c0 .516.03 1.008.088 1.478.058.471.161.824.308 1.06H32.87a4.435 4.435.0 01-.22-1.104c-.5.515-1.087.876-1.762 1.081a7.084 7.084.0 01-2.071.31c-.544.0-1.05-.067-1.52-.2a3.472 3.472.0 01-1.234-.617 2.87 2.87.0 01-.826-1.059c-.199-.426-.298-.934-.298-1.522.0-.647.114-1.18.342-1.6.227-.419.52-.753.881-1.004.36-.25.771-.437 1.234-.562.462-.125.929-.224 1.399-.298.47-.073.932-.132 1.387-.176.456-.044.86-.11 1.212-.199.353-.088.631-.217.837-.386.206-.169.301-.415.287-.74.0-.337-.055-.606-.166-.804a1.217 1.217.0 00-.44-.464 1.737 1.737.0 00-.639-.22 5.292 5.292.0 00-.782-.055c-.617.0-1.101.132-1.454.397-.352.264-.558.706-.617 1.323h-3.128c.044-.735.227-1.345.55-1.83zm6.179 4.423a5.095 5.095.0 01-.639.165 9.68 9.68.0 01-.716.11c-.25.03-.5.067-.749.11a5.616 5.616.0 00-.694.177 2.057 2.057.0 00-.594.298c-.17.125-.305.284-.408.474-.103.192-.154.434-.154.728.0.28.051.515.154.706.103.192.242.342.419.453.176.11.381.187.617.231.234.044.477.066.726.066.617.0 1.094-.102 1.432-.309.338-.205.587-.452.75-.739.16-.286.26-.576.297-.87.036-.295.055-.53.055-.707v-1.17a1.4 1.4.0 01-.496.277zm11.863-6.1v2.096h-2.291v5.647c0 .53.088.883.264 1.059.176.177.529.265 1.057.265.177.0.345-.007.507-.022.161-.015.316-.037.463-.066v2.426a7.49 7.49.0 01-.882.089 21.67 21.67.0 01-.947.022c-.484.0-.944-.034-1.377-.1a3.233 3.233.0 01-1.145-.386 2.04 2.04.0 01-.782-.816c-.191-.353-.287-.816-.287-1.39v-6.728H36.57v-2.096h1.894v-3.42h3.129v3.42h2.29zm4.471.0v2.118h.044a3.907 3.907.0 011.454-1.754 4.213 4.213.0 011.036-.497 3.734 3.734.0 011.145-.176c.206.0.433.037.683.11v2.912a5.862 5.862.0 00-.528-.077 5.566 5.566.0 00-.595-.033c-.573.0-1.058.096-1.454.287a2.52 2.52.0 00-.958.783 3.143 3.143.0 00-.518 1.158 6.32 6.32.0 00-.154 1.434v5.14h-3.128V10.407h2.973zM54.039 8.642V6.06h3.128v2.582H54.04zm3.128 1.765v11.405H54.04V10.407h3.128zm1.63.0h3.569l2.005 2.978 1.982-2.978h3.459l-3.745 5.339 4.208 6.067h-3.57l-2.378-3.596-2.38 3.596h-3.502l4.097-6.001zM74.094 31.25V.732H71.9V0h3.035v31.982H71.9v-.732z"/></g></svg></span><span class="font-weight-bold">specification</span><span class="navbar-version"> &mdash; unstable version</span>
+	</a>
+	<div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
+		<ul class="navbar-nav mt-2 mt-lg-0">
+
+			<li class="nav-item mr-4 mb-2 mb-lg-0"><a href="https://matrix.org/foundation/">Foundation</a>
+			</li>
+
+      <li class="nav-item mr-4 mb-2 mb-lg-0"><a href="https://matrix.org/faq/">FAQs</a>
+			</li>
+
+      <li class="nav-item mr-4 mb-2 mb-lg-0"><a href="https://matrix.org/blog/posts">Blog</a>
+      </li>
+
+			
+			
+		</ul>
+	</div>
+	<div class="navbar-nav d-none d-lg-block"></div>
+</nav>
+
+
+
+
+    </header>
+    <div class="container-fluid td-outer">
+      <div class="td-main">
+        <div class="row flex-xl-nowrap">
+          <div class="col-12 col-md-3 col-xl-3 td-sidebar d-print-none">
+            
+<div id="td-sidebar-menu" class="td-sidebar__inner">
+  <div id="content-mobile">
+  <form class="td-sidebar__search d-flex align-items-center">
+    
+    <button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type="button" data-toggle="collapse" data-target="#td-section-nav" aria-controls="td-section-nav" aria-expanded="false" aria-label="Toggle section navigation">
+    </button>
+  </form>
+  </div>
+  <div id="content-desktop"></div>
+  <nav class="collapse td-sidebar-nav" id="td-section-nav">
+    <ul class="td-sidebar-nav__section pr-md-3 ul-0">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m--li">
+  <a href="/" class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id="m-"><span class="">Matrix Specification</span></a>
+  <ul class="ul-1">
+    <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-client-server-api-li">
+  <a href="/client-server-api/" class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id="m-client-server-api"><span class="">Client-Server API</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-server-server-api-li">
+  <a href="/server-server-api/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-server-server-api"><span class="">Server-Server API</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-application-service-api-li">
+  <a href="/application-service-api/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-application-service-api"><span class="">Application Service API</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-identity-service-api-li">
+  <a href="/identity-service-api/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-identity-service-api"><span class="">Identity Service API</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-push-gateway-api-li">
+  <a href="/push-gateway-api/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-push-gateway-api"><span class="">Push Gateway API</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-rooms-li">
+  <a href="/rooms/" class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id="m-rooms"><span class="">Room Versions</span></a>
+  <ul class="ul-2 foldable">
+    <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv1-li">
+  <a href="/rooms/v1/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv1"><span class="">Room Version 1</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv2-li">
+  <a href="/rooms/v2/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv2"><span class="">Room Version 2</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv3-li">
+  <a href="/rooms/v3/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv3"><span class="">Room Version 3</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv4-li">
+  <a href="/rooms/v4/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv4"><span class="">Room Version 4</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv5-li">
+  <a href="/rooms/v5/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv5"><span class="">Room Version 5</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv6-li">
+  <a href="/rooms/v6/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv6"><span class="">Room Version 6</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv7-li">
+  <a href="/rooms/v7/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv7"><span class="">Room Version 7</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv8-li">
+  <a href="/rooms/v8/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv8"><span class="">Room Version 8</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv9-li">
+  <a href="/rooms/v9/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv9"><span class="">Room Version 9</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv10-li">
+  <a href="/rooms/v10/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv10"><span class="">Room Version 10</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-roomsv11-li">
+  <a href="/rooms/v11/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-roomsv11"><span class="">Room Version 11</span></a>
+</li>
+  </ul>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id="m-proposals-li">
+  <a href="/proposals/" class="align-left pl-0 active td-sidebar-link td-sidebar-link__page" id="m-proposals"><span class="td-sidebar-nav-active-item">Spec Change Proposals</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-appendices-li">
+  <a href="/appendices/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-appendices"><span class="">Appendices</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-changelog-li">
+  <a href="/changelog/" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id="m-changelog"><span class="">Changelog</span></a>
+</li>
+  </ul>
+</li>
+    </ul>
+  </nav>
+</div>
+
+          </div>
+          <main class="col-12 col-md-9 col-xl-7 pl-md-5" role="main">
+            
+
+
+
+
+
+
+<div class="pageinfo pageinfo-primary pageinfo-unstable">
+  <p>You're looking at an unstable version of this specification.
+  Unstable specifications may change at any time without notice.</p>
+  <p><a href="https://spec.matrix.org/latest">Switch to the current stable release</a>.</p>
+</div>
+
+
+            
+
+
+<nav aria-label="breadcrumb" class="d-none d-md-block d-print-none">
+	<ol class="breadcrumb spb-1">
+
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/">Matrix Specification</a>
+</li>
+
+
+
+<li class="breadcrumb-item active" aria-current="page">
+	<a href="/proposals/">Spec Change Proposals</a>
+</li>
+
+	</ol>
+</nav	>
+
+
+
+
+            
+<div class="td-content">
+	<h1>Spec Change Proposals</h1>
+	<p>If you are interested in submitting a change to the Matrix
+Specification, please take note of the following guidelines.</p>
+<p>Most changes to the Specification require a formal proposal. Bug fixes,
+typos, and clarifications to existing behaviour do not need proposals -
+see the <a href="https://github.com/matrix-org/matrix-spec/blob/main/CONTRIBUTING.rst">contributing
+guide</a>
+for more information on what does and does not need a proposal.</p>
+<p>The proposal process involves some technical writing, having it reviewed
+by everyone, having the proposal being accepted, then actually having
+your ideas implemented as committed changes to the <a href="https://github.com/matrix-org/matrix-spec">Specification
+repository</a>.</p>
+<p>Meet the <a href="https://matrix.org/foundation">members of the Core Team</a>, a
+group of individuals tasked with ensuring the spec process is as smooth
+and painless as possible. Members of the Spec Core Team will do their
+best to participate in discussion, summarise when things become
+long-winded, and generally try to act towards the benefit of everyone.
+As a majority, team members have the ability to change the state of a
+proposal, and individually have the final say in proposal discussion.</p>
+<h2 id="guiding-principles">Guiding Principles</h2>
+<p>Proposals <strong>must</strong> act to the greater benefit of the entire Matrix
+ecosystem, rather than benefiting or privileging any single player or
+subset of players -and must not contain any patent encumbered
+intellectual property. Members of the Core Team pledge to act as a
+neutral custodian for Matrix on behalf of the whole ecosystem.</p>
+<p>For clarity: the Matrix ecosystem is anyone who uses the Matrix
+protocol. That includes client users, server admins, client developers,
+bot developers, bridge and application service developers, users and
+admins who are indirectly using Matrix via 3rd party networks which
+happen to be bridged, server developers, room moderators and admins,
+companies/projects building products or services on Matrix, spec
+contributors, translators, and those who created it in the first place.</p>
+<p>&ldquo;Greater benefit&rdquo; could include maximising:</p>
+<ul>
+<li>the number of end-users reachable on the open Matrix network</li>
+<li>the number of regular users on the Matrix network (e.g. 30-day
+retained federated users)</li>
+<li>the number of online servers in the open federation</li>
+<li>the number of developers building on Matrix</li>
+<li>the number of independent implementations which use Matrix</li>
+<li>the number of bridged end-users reachable on the open Matrix network</li>
+<li>the signal-to-noise ratio of the content on the open Matrix network
+(i.e. minimising spam)</li>
+<li>the ability for users to discover content on their terms (empowering
+them to select what to see and what not to see)</li>
+<li>the quality and utility of the Matrix spec (as defined by ease and
+ability with which a developer can implement spec-compliant clients,
+servers, bots, bridges, and other integrations without needing to
+refer to any other external material)</li>
+</ul>
+<p>In addition, proposal authors are expected to uphold the following
+values in their proposed changes to the Matrix protocol:</p>
+<ul>
+<li>Supporting the whole long-term ecosystem rather than individual
+stakeholder gain</li>
+<li>Openness rather than proprietary lock-in</li>
+<li>Interoperability rather than fragmentation</li>
+<li>Cross-platform rather than platform-specific</li>
+<li>Collaboration rather than competition</li>
+<li>Accessibility rather than elitism</li>
+<li>Transparency rather than stealth</li>
+<li>Empathy rather than contrariness</li>
+<li>Pragmatism rather than perfection</li>
+<li>Proof rather than conjecture</li>
+</ul>
+<p>Please <a href="https://github.com/matrix-org/matrix-spec-proposals/blob/main/proposals/1779-open-governance.md">see
+MSC1779</a>
+for full details of the project&rsquo;s Guiding Principles.</p>
+<h2 id="technical-notes">Technical notes</h2>
+<p>Proposals <strong>must</strong> develop Matrix as a layered protocol: with new
+features building on layers of shared abstractions rather than
+introducing tight vertical coupling within the stack. This ensures that
+new features can evolve rapidly by building on existing layers and
+swapping out old features without impacting the rest of the stack or
+requiring substantial upgrades to the whole ecosystem. This is critical
+for Matrix to rapidly evolve and compete effectively with centralised
+systems, despite being a federated protocol.</p>
+<p>For instance, new features should be implemented using the highest layer
+abstractions possible (e.g. new event types, which layer on top of the
+existing room semantics, and so don&rsquo;t even require any API changes).
+Failing that, the next recourse would be backwards-compatible changes to
+the next layer down (e.g. room APIs); failing that, considering changes
+to the format of events or the DAG; etc. It would be a very unusual
+feature which doesn&rsquo;t build on the existing infrastructure provided by
+the spec and instead created new primitives or low level APIs.</p>
+<p>Backwards compatibility is very important for Matrix, but not at the
+expense of hindering the protocol&rsquo;s evolution. Backwards incompatible
+changes to endpoints are allowed when no other alternative exists, and
+must be versioned under a new major release of the API. Backwards
+incompatible changes to the room algorithm are also allowed when no
+other alternative exists, and must be versioned under a new version of
+the room algorithm.</p>
+<p>There is sometimes a dilemma over where to include higher level
+features: for instance, should video conferencing be formalised in the
+spec, or should it be implemented via widgets? Should reputation systems
+be specified? Should search engine behaviour be specified?</p>
+<p>There is no universal answer to this, but the following guidelines
+should be applied:</p>
+<ol>
+<li>If the feature would benefit the whole Matrix ecosystem and is
+aligned with the guiding principles above, then it should be
+supported by the spec.</li>
+<li>If the spec already makes the feature possible without changing any
+of the implementations and spec, then it may not need to be added to
+the spec.</li>
+<li>However, if the best user experience for a feature does require
+custom implementation behaviour then the behaviour should be defined
+in the spec such that all implementations may implement it.</li>
+<li>However, the spec must never add dependencies on
+unspecified/nonstandardised 3rd party behaviour.</li>
+</ol>
+<p>As a worked example:</p>
+<ol>
+<li>Video conferencing is clearly a feature which would benefit the
+whole ecosystem, and so the spec should find a way to make it
+happen.</li>
+<li>Video conferencing can be achieved by widgets without requiring any
+compulsory changes to clients nor servers to work, and so could be
+omitted from the spec.</li>
+<li>A better experience could be achieved by embedding Jitsi natively
+into clients rather than using a widget&hellip;</li>
+<li>&hellip;except that would add a dependency on unspecified/nonstandardised
+3rd party behaviour, so must not be added to the spec.</li>
+</ol>
+<p>Therefore, our two options in the specific case of video conferencing
+are either to spec SFU conferencing semantics for WebRTC (or refer to an
+existing spec for doing so), or to keep it as a widget-based approach
+(optionally with widget extensions specific for more deeply integrating
+video conferencing use cases).</p>
+<p>As an alternative example: it&rsquo;s very unlikely that &ldquo;how to visualise
+Magnetic Resonance Imaging data over Matrix&rdquo; would ever be added to the
+Matrix spec (other than perhaps a custom event type in a wider
+standardised Matrix event registry) given that the spec&rsquo;s existing
+primitives of file transfer and extensible events (MSC1767) give
+excellent tools for transferring and visualising arbitrary rich data.</p>
+<p>Supporting public search engines are likely to not require custom spec
+features (other than possibly better bulk access APIs), given they can
+be implemented as clients using the existing CS API. An exception could
+be API features required by decentralised search infrastructure
+(avoiding centralisation of power by a centralised search engine).</p>
+<p>Features such as reactions, threaded messages, editable messages,
+spam/abuse/content filtering (and reputation systems), are all features
+which would clearly benefit the whole Matrix ecosystem, and cannot be
+implemented in an interoperable way using the current spec; so they
+necessitate a spec change.</p>
+<h2 id="process">Process</h2>
+<p>The process for submitting a Matrix Spec Change (MSC) Proposal in detail
+is as follows:</p>
+<ul>
+<li>Create a first draft of your proposal using <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/">GitHub-flavored
+Markdown</a>
+<ul>
+<li>In the document, clearly state the problem being solved, and the
+possible solutions being proposed for solving it and their
+respective trade-offs.</li>
+<li>Proposal documents are intended to be as lightweight and
+flexible as the author desires; there is no formal template; the
+intention is to iterate as quickly as possible to get to a good
+design.</li>
+<li>However, a <a href="https://github.com/matrix-org/matrix-spec-proposals/blob/main/proposals/0000-proposal-template.md">template with suggested
+headers</a>
+is available to get you started if necessary.</li>
+<li>Take care in creating your proposal. Specify your intended
+changes, and give reasoning to back them up. Changes without
+justification will likely be poorly received by the community.</li>
+</ul>
+</li>
+<li>Fork and make a PR to the
+<a href="https://github.com/matrix-org/matrix-spec-proposals">matrix-spec-proposals</a> repository.
+The ID of your PR will become the MSC ID for the lifetime of your
+proposal.
+<ul>
+<li>The proposal must live in the <code>proposals/</code> directory with a
+filename that follows the format <code>1234-my-new-proposal.md</code> where
+<code>1234</code> is the MSC ID.</li>
+<li>Your PR description must include a link to the rendered Markdown
+document and a summary of the proposal.</li>
+<li>It is often very helpful to link any related MSCs or <a href="https://github.com/matrix-org/matrix-spec/issues">matrix-spec
+issues</a> to give
+context for the proposal.</li>
+<li>Additionally, please be sure to sign off your proposal PR as per
+the guidelines listed on
+<a href="https://github.com/matrix-org/matrix-spec/blob/main/CONTRIBUTING.rst">CONTRIBUTING.rst</a>.</li>
+</ul>
+</li>
+<li>Gather feedback as widely as possible.
+<ul>
+<li>The aim is to get maximum consensus towards an optimal solution.
+Sometimes trade-offs are required to meet this goal. Decisions
+should be made to the benefit of all major use cases.</li>
+<li>A good place to ask for feedback on a specific proposal is
+<a href="https://matrix.to/#/#matrix-spec:matrix.org">#matrix-spec:matrix.org</a>.
+If preferred, an alternative room can be created and advertised
+in #matrix-spec:matrix.org. Please also link to the room in
+your PR description.</li>
+<li>For additional discussion areas, know that
+#matrix-dev:matrix.org is for developers using existing Matrix
+APIs, #matrix:matrix.org is for users trying to run Matrix apps
+(clients &amp; servers) and #matrix-architecture:matrix.org is for
+cross-cutting discussion of Matrix&rsquo;s architectural design.</li>
+<li>The point of the spec proposal process is to be collaborative
+rather than competitive, and to try to solve the problem in
+question with the optimal set of trade-offs. The author should
+neutrally gather the various viewpoints and get consensus, but
+this can sometimes be time-consuming (or the author may be
+biased), in which case an impartial &lsquo;shepherd&rsquo; can be assigned
+to help guide the proposal through this process instead. A
+shepherd is typically a neutral party from the Spec Core Team or
+an experienced member of the community. There is no formal
+process for assignment. Simply ask for a shepherd to help get
+your proposal through and one will be assigned based on
+availability. Having a shepherd is not a requirement for
+proposal acceptance.</li>
+</ul>
+</li>
+<li>Members of the Spec Core Team and community will review and discuss
+the PR in the comments and in relevant rooms on Matrix. Discussion
+outside of GitHub should be summarised in a comment on the PR.</li>
+<li>When a member of the Spec Core Team believes that no new discussion
+points are being made, and the proposal has suitable evidence of
+working (see <a href="#implementing-a-proposal">implementing a proposal</a>
+below), they will propose a motion for a final comment period (FCP),
+along with a <em>disposition</em> of either merge, close or postpone. This
+FCP is provided to allow a short period of time for any invested
+party to provide a final objection before a major decision is made.
+If sufficient reasoning is given, an FCP can be cancelled. It is
+often preceded by a comment summarising the current state of the
+discussion, along with reasoning for its occurrence.</li>
+<li>A concern can be raised by a Spec Core Team member at any time,
+which will block an FCP from beginning. An FCP will only begin when
+75% of the members of the Spec Core Team agree on its outcome, and
+all existing concerns have been resolved.</li>
+<li>The FCP will then begin and last for 5 days, giving anyone else some
+time to speak up before it concludes. If sufficient reasoning
+against the disposition is provided, a member of the Spec Core Team can
+raise a concern and block FCP from completing. This will not reset or
+pause the 5 day FCP timer, but FCP will not conclude until all concerns have
+been resolved. If sufficient change in the MSC is required to resolve those
+concerns, FCP might be cancelled and reproposed. Once FCP has concluded,
+the disposition of the FCP will be carried out.</li>
+<li>Once the proposal has been accepted and merged, it is time to submit
+the actual change to the Specification that your proposal reasoned
+about. This is known as a spec PR. However in order for the spec PR
+to be accepted, an implementation <strong>must</strong> be shown to prove that it
+works well in practice. A link to the implementation should be
+included in the PR description. In addition, any significant
+unforeseen changes to the original idea found during this process
+will warrant another MSC. Any minor, non-fundamental changes are
+allowed but <strong>must</strong> be documented in the original proposal
+document. This ensures that someone reading a proposal in the future
+doesn&rsquo;t assume old information that wasn&rsquo;t merged into the spec.
+<ul>
+<li>Similar to the proposal PR, please sign off the spec PR as per
+the guidelines on
+<a href="https://github.com/matrix-org/matrix-spec/blob/main/CONTRIBUTING.rst">CONTRIBUTING.rst</a>.</li>
+</ul>
+</li>
+<li>Your PR will then be reviewed and hopefully merged on the grounds it
+is implemented sufficiently. If so, then give yourself a pat on the
+back knowing you&rsquo;ve contributed to the Matrix protocol for the
+benefit of users and developers alike :)</li>
+</ul>
+<p>The process for handling proposals is shown visually in the following
+diagram. Note that the lifetime of a proposal is tracked through the
+corresponding labels for each stage on the
+<a href="https://github.com/matrix-org/matrix-spec-proposals">matrix-spec-proposals</a>
+pull request trackers.</p>
+<pre tabindex="0"><code>                           +                          +
+         Proposals         |          Spec PRs        |  Additional States
+         +-------+         |          +------+        |  +---------------+
+                           |                          |
+ +----------------------+  |         +---------+      |    +-----------+
+ |                      |  |         |         |      |    |           |
+ |      Proposal        |  |  +------= Spec PR |      |    | Postponed |
+ | Drafting and Initial |  |  |      | Missing |      |    |           |
+ |  Feedback Gathering  |  |  |      |         |      |    +-----------+
+ |                      |  |  |      +----+----+      |
+ +----------+-----------+  |  |           |           |    +----------+
+            |              |  |           v           |    |          |
+            v              |  |  +-----------------+  |    |  Closed  |
+  +-------------------+    |  |  |                 |  |    |          |
+  |                   |    |  |  | Spec PR Created |  |    +----------+
+  |    Proposal PR    |    |  |  |  and In Review  |  |
+  |     In Review     |    |  |  |                 |  |
+  |                   |    |  |  +--------+--------+  |
+  +---------+---------+    |  |           |           |
+            |              |  |           v           |
+            v              |  |     +-----------+     |
+ +----------------------+  |  |     |           |     |
+ |                      |  |  |     |  Spec PR  |     |
+ |    Proposed Final    |  |  |     |  Merged!  |     |
+ |    Comment Period    |  |  |     |           |     |
+ |                      |  |  |     +-----------+     |
+ +----------+-----------+  |  |                       |
+            |              |  |                       |
+            v              |  |                       |
+ +----------------------+  |  |                       |
+ |                      |  |  |                       |
+ | Final Comment Period |  |  |                       |
+ |                      |  |  |                       |
+ +----------+-----------+  |  |                       |
+            |              |  |                       |
+            v              |  |                       |
+ +----------------------+  |  |                       |
+ |                      |  |  |                       |
+ | Final Comment Period |  |  |                       |
+ |       Complete       |  |  |                       |
+ |                      |  |  |                       |
+ +----------+-----------+  |  |                       |
+            |              |  |                       |
+            +-----------------+                       |
+                           |                          |
+                           +                          +
+</code></pre><h2 id="lifetime-states">Lifetime States</h2>
+<p><strong>Note:</strong> All labels are to be placed on the proposal PR.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>GitHub Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Proposal Drafting and Feedback</td>
+<td><a href="https://github.com/matrix-org/matrix-spec-proposals/issues?q=is:open+draft:true">Draft pull request</a></td>
+<td>A proposal document which is still work-in-progress but is being shared to incorporate feedback. Please prefix your proposal&rsquo;s title with <code>[WIP]</code> to make it easier for reviewers to skim their notifications list.</td>
+</tr>
+<tr>
+<td>Proposal In Review</td>
+<td><a href="https://github.com/matrix-org/matrix-spec-proposals/issues?q=draft:false+label%3Aproposal+-label%3Aabandoned+-label%3Afinal-comment-period+-label%3Afinished-final-comment-period+-label%3Amerged+-label%3Aobsolete+-label%3Aproposal-postponed+-label%3Aproposed-final-comment-period+-label%3Aproposal-in-review+-label%3Aspec-pr-in-review+-label%3Aspec-pr-missing">No label</a></td>
+<td>A proposal document which is now ready and waiting for review by the Spec Core Team and community</td>
+</tr>
+<tr>
+<td>Proposed Final Comment Period</td>
+<td><a href="https://github.com/matrix-org/matrix-spec-proposals/issues?q=draft:false+label%3Aproposal+label%3Aproposed-final-comment-period+">proposed-final-comment-period</a></td>
+<td>Currently awaiting signoff of a 75% majority of team members in order to enter the final comment period</td>
+</tr>
+<tr>
+<td>Final Comment Period</td>
+<td><a href="https://github.com/matrix-org/matrix-spec-proposals/issues?q=draft:false+label%3Aproposal+label%3Afinal-comment-period+">final-comment-period</a></td>
+<td>A proposal document which has reached final comment period either for merge, closure or postponement</td>
+</tr>
+<tr>
+<td>Final Comment Period Complete</td>
+<td><a href="https://github.com/matrix-org/matrix-spec-proposals/issues?q=draft:false+label%3Aproposal+label%3Afinished-final-comment-period+">finished-final-comment-period</a></td>
+<td>The final comment period has been completed. Waiting for a demonstration implementation</td>
+</tr>
+<tr>
+<td>Spec PR Missing</td>
+<td><a href="https://github.com/matrix-org/matrix-spec-proposals/issues?q=draft:false+label%3Aproposal+label%3Aspec-pr-missing">spec-pr-missing</a></td>
+<td>The proposal has been agreed, and proven with a demonstration implementation. Waiting for a PR against the Spec</td>
+</tr>
+<tr>
+<td>Spec PR In Review</td>
+<td><a href="https://github.com/matrix-org/matrix-spec-proposals/issues?q=draft:false+label%3Aproposal+label%3Aspec-pr-in-review+">spec-pr-in-review</a></td>
+<td>The spec PR has been written, and is currently under review</td>
+</tr>
+<tr>
+<td>Spec PR Merged</td>
+<td><a href="https://github.com/matrix-org/matrix-spec-proposals/issues?q=draft:false+label%3Aproposal+label%3Amerged">merged</a></td>
+<td>A proposal with a sufficient working implementation and whose Spec PR has been merged!</td>
+</tr>
+<tr>
+<td>Postponed</td>
+<td><a href="https://github.com/matrix-org/matrix-spec-proposals/issues?q=draft:false+label%3Aproposal+label%3Aproposal-postponed+">proposal-postponed</a></td>
+<td>A proposal that is temporarily blocked or a feature that may not be useful currently but perhaps sometime in the future</td>
+</tr>
+<tr>
+<td>Abandoned</td>
+<td><a href="https://github.com/matrix-org/matrix-spec-proposals/issues?q=draft:false+label%3Aproposal+label%3Aabandoned">abandoned</a></td>
+<td>A proposal where the author/shepherd is not responsive</td>
+</tr>
+<tr>
+<td>Obsolete</td>
+<td><a href="https://github.com/matrix-org/matrix-spec-proposals/issues?q=draft:false+label%3Aproposal+label%3Aobsolete+">obsolete</a></td>
+<td>A proposal which has been made obsolete by another proposal or decision elsewhere.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="categories">Categories</h2>
+<p>We use category labels on MSCs to place them into a track of work. The
+Spec Core Team decides which of the tracks they are focusing on for the
+next while and generally makes an effort to pull MSCs out of that
+category when possible.</p>
+<p>The current categories are:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>GitHub Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core</td>
+<td>kind:core</td>
+<td>Important for the protocol&rsquo;s success.</td>
+</tr>
+<tr>
+<td>Feature</td>
+<td>kind:feature</td>
+<td>Nice to have additions to the spec.</td>
+</tr>
+<tr>
+<td>Maintenance</td>
+<td>kind:maintenance</td>
+<td>Fixes or clarifies existing spec.</td>
+</tr>
+</tbody>
+</table>
+<p>Some examples of core MSCs would be aggregations, cross-signing, and
+groups/communities. These are the sorts of things that if not
+implemented could cause the protocol to fail or become second-class.
+Features would be areas like enhanced media APIs, new transports, and
+bookmarks in comparison. Finally, maintenance MSCs would include
+improving error codes, clarifying what is required of an API, and adding
+properties to an API which makes it easier to use.</p>
+<p>The Spec Core Team assigns a category to each MSC based on the
+descriptions above. This can mean that new MSCs get categorized into an
+area the team isn&rsquo;t focused on, though that can always change as
+priorities evolve. We still encourage that MSCs be opened, even if not
+the focus for the time being, as they can still make progress and even
+be merged without the Spec Core Team focusing on them specifically.</p>
+<h2 id="implementing-a-proposal">Implementing a proposal</h2>
+<p>As part of the proposal process the Spec Core Team will require evidence
+of the MSC working in order for it to move into FCP. This can usually be
+a branch/pull request to whichever implementation of choice that proves
+the MSC works in practice, though in some cases the MSC itself will be
+small enough to be considered proven. Where it&rsquo;s unclear if an MSC will
+require an implementation proof, ask in
+<a href="https://matrix.to/#/#matrix-spec:matrix.org">#matrix-spec:matrix.org</a>.</p>
+<h3 id="early-release-of-an-mscidea">Early release of an MSC/idea</h3>
+<p>To help facilitate early releases of software dependent on a spec
+release, implementations are required to use the following process to
+ensure that the official Matrix namespace is not cluttered with
+development or testing data.</p>
+<p><strong>Note:</strong> Unreleased implementations (including proofs-of-concept demonstrating
+that a particular MSC works) do not have to follow this process.</p>
+<ol>
+<li>Have an idea for a feature.</li>
+<li>Implement the feature using unstable endpoints, vendor prefixes, and
+unstable feature flags as appropriate.
+<ul>
+<li>When using unstable endpoints, they MUST include a vendor
+prefix. For example:
+<code>/_matrix/client/unstable/com.example/login</code>. Vendor prefixes
+throughout Matrix always use the Java package naming convention.
+The MSC for the feature should identify which preferred vendor
+prefix is to be used by early adopters.</li>
+<li>Note that unstable namespaces do not automatically inherit
+endpoints from stable namespaces: for example, the fact that
+<code>/_matrix/client/r0/sync</code> exists does not imply that
+<code>/_matrix/client/unstable/com.example/sync</code> exists.</li>
+<li>If the client needs to be sure the server supports the feature,
+an unstable feature flag that MUST be vendor prefixed is to be
+used. This kind of flag shows up in the <code>unstable_features</code>
+section of <code>/versions</code> as, for example, <code>com.example.new_login</code>.
+The MSC for the feature should identify which preferred feature
+flag is to be used by early adopters.</li>
+<li>When using this approach correctly, the implementation can
+ship/release the feature at any time, so long as the
+implementation is able to accept the technical debt that results
+from needing to provide adequate backwards and forwards
+compatibility. The implementation MUST support the flag (and
+server-side implementation) disappearing and be generally safe
+for users. Note that implementations early in the MSC review
+process may also be required to provide backwards compatibility
+with earlier editions of the proposal.</li>
+<li>If the implementation cannot support the technical debt (or if
+it&rsquo;s impossible to provide forwards/backwards compatibility -
+e.g. a user authentication change which can&rsquo;t be safely rolled
+back), the implementation should not attempt to implement the
+feature and should instead wait for a spec release.</li>
+<li>If at any point after early release, the idea changes in a
+backwards-incompatible way, the feature flag should also change
+so that implementations can adapt as needed.</li>
+</ul>
+</li>
+<li>In parallel, or ahead of implementation, open an MSC and solicit
+review per above.</li>
+<li>Before FCP can be called, the Spec Core Team will require evidence
+of the MSC working as proposed. A typical example of this is an
+implementation of the MSC, though the implementation does not need
+to be shipped anywhere and can therefore avoid the
+forwards/backwards compatibility concerns mentioned here.</li>
+<li>The FCP process is completed, and assuming nothing is flagged the
+MSC lands.</li>
+<li>Implementations can now switch to using stable prefixes
+(for example, for an endpoint, moving from
+<code>/unstable/org.matrix.mscxxxx/frobnicate</code>
+to <code>/v1/frobnicate</code>), assuming that the change
+is backwards compatible with older implementations. In the rare occasion
+where backwards compatibility is not possible without a new spec release,
+implementations should continue to use unstable prefixes.</li>
+<li>A spec PR is written to incorporate the changes into Matrix.</li>
+<li>A spec release happens.</li>
+<li>A transition period of about 2 months starts immediately after the
+spec release, before implementations start to encourage other
+implementations to switch to stable endpoints. For example, a server
+implementation should start asking client implementations to support
+the stable endpoints 2 months after the spec release, if they
+haven&rsquo;t already. The same applies in the reverse: if clients cannot
+switch to stable prefixes because server implementations haven&rsquo;t
+started supporting the new spec release, some noise should be raised
+in the general direction of the implementation.</li>
+</ol>
+<div class="alert note " role="alert">
+MSCs MUST still describe what the stable endpoints/feature looks like
+with a note towards the bottom for what the unstable feature
+flag/prefixes are. For example, an MSC would propose <code>/_matrix/client/r0/new/endpoint</code>, not <code>/_matrix/client/unstable/ com.example/new/endpoint</code>.
+</div>
+<p>In summary:</p>
+<ul>
+<li>Implementations MUST NOT use stable endpoints before the MSC has
+completed FCP. Once that has occurred, implementations are allowed
+to use stable endpoints, but are not required to.</li>
+<li>Implementations are able to ship features that are exposed to users
+by default before an MSC has been merged to the spec, provided they
+follow the process above.</li>
+<li>Implementations SHOULD be wary of the technical debt they are
+incurring by moving faster than the spec.</li>
+<li>The vendor prefix is chosen by the developer of the feature, using
+the Java package naming convention. The foundation&rsquo;s preferred
+vendor prefix is <code>org.matrix</code>.</li>
+<li>The vendor prefixes, unstable feature flags, and unstable endpoints
+should be included in the MSC, though the MSC MUST be written in a
+way that proposes new stable endpoints. Typically this is solved by
+a small table at the bottom mapping the various values from stable
+to unstable.</li>
+</ul>
+<h2 id="proposal-tracking">Proposal Tracking</h2>
+<p>This is a living document generated from the list of proposals on the
+issue and pull request trackers of the
+<a href="https://github.com/matrix-org/matrix-spec-proposals">matrix-spec-proposals</a> repo.</p>
+<p>We use labels and some metadata in MSC PR descriptions to generate this
+page. Labels are assigned by the Spec Core Team whilst triaging the
+proposals based on those which exist in the
+<a href="https://github.com/matrix-org/matrix-spec-proposals">matrix-spec-proposals</a> repo already.</p>
+<p>It is worth mentioning that a previous version of the MSC process used a
+mixture of GitHub issues and PRs, leading to some MSC numbers deriving
+from GitHub issue IDs instead. A useful feature of GitHub is that it
+does automatically resolve to an issue, if an issue ID is placed in a
+pull URL. This means that
+<a href="https://github.com/matrix-org/matrix-spec-proposals/pull/$MSCID">https://github.com/matrix-org/matrix-spec-proposals/pull/$MSCID</a> will correctly
+resolve to the desired MSC, whether it started as an issue or a PR.</p>
+<p>Other metadata:</p>
+<ul>
+<li>The MSC number is taken from the GitHub Pull Request ID. This is
+carried for the lifetime of the proposal. These IDs do not necessary
+represent a chronological order.</li>
+<li>The GitHub PR title will act as the MSC&rsquo;s title.</li>
+<li>Please link to the spec PR (if any) by adding a &ldquo;PRs: #1234&rdquo; line
+in the issue description.</li>
+<li>The creation date is taken from the GitHub PR, but can be overridden
+by adding a &ldquo;Date: yyyy-mm-dd&rdquo; line in the PR description.</li>
+<li>Updated Date is taken from GitHub.</li>
+<li>Author is the creator of the MSC PR, but can be overridden by adding
+a &ldquo;Author: @username&rdquo; line in the body of the issue description.
+Please make sure @username is a GitHub user (include the @!)</li>
+<li>A shepherd can be assigned by adding a &ldquo;Shepherd: @username&rdquo; line in
+the issue description. Again, make sure this is a real GitHub user.</li>
+</ul>
+
+</div>
+
+
+          </main>
+        </div>
+      </div>
+      
+
+
+<footer class="py-5 row d-print-none">
+  <div class="container-fluid mx-sm-5">
+    <div class="row">
+      <div class="col-12 text-center text-xs-center order-sm-3">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="GitHub" aria-label="GitHub">
+    <a class="text-dark" target="_blank" rel="noopener noreferrer" href="https://github.com/matrix-org">
+      <i class="fab fa-github"></i>
+    </a>
+  </li>
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="GitLab" aria-label="GitLab">
+    <a class="text-dark" target="_blank" rel="noopener noreferrer" href="https://gitlab.matrix.org/matrix-org">
+      <i class="fab fa-gitlab"></i>
+    </a>
+  </li>
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="YouTube" aria-label="YouTube">
+    <a class="text-dark" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/channel/UCVFkW-chclhuyYRbmmfwt6w">
+      <i class="fab fa-youtube"></i>
+    </a>
+  </li>
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="Twitter" aria-label="Twitter">
+    <a class="text-dark" target="_blank" rel="noopener noreferrer" href="https://twitter.com/matrixdotorg">
+      <i class="fab fa-twitter"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 text-center py-2 order-sm-3">
+        <small>&copy; 2023 The Matrix.org Foundation CIC</small>
+	
+		
+	
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </div>
+    
+
+<script src="/js/main.min.be25a680a0d95dc8b5d6664622e2134aa894220e2f224ef609e00f633a3a1b32.js" integrity="sha256-viWmgKDZXci11mZGIuITSqiUIg4vIk72CeAPYzo6GzI=" crossorigin="anonymous"></script>
+<script src='/js/tabpane-persist.js'></script>
+
+
+<script defer language="javascript" type="text/javascript"  src="/js/toc.js"></script>
+
+  </body>
+</html>

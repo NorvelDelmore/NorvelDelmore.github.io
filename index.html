@@ -1,0 +1,3950 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.119.0">
+<meta name="robots" content="index, follow">
+
+
+<link rel="shortcut icon" href="/favicons/favicon.ico" >
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon-180x180.png" sizes="180x180">
+<link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicons/android-36x36.png" sizes="36x36">
+<link rel="icon" type="image/png" href="/favicons/android-48x48.png" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicons/android-72x72.png" sizes="72x72">
+<link rel="icon" type="image/png" href="/favicons/android-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicons/android-144x144.png" sizes="144x144">
+<link rel="icon" type="image/png" href="/favicons/android-192x192.png" sizes="192x192">
+
+<title>Matrix Specification</title>
+<meta name="description" content="Home of the Matrix specification for decentralised communication">
+<meta property="og:title" content="Client-Server API" />
+<meta property="og:description" content="Home of the Matrix specification for decentralised communication" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/" />
+<meta itemprop="name" content="Client-Server API">
+<meta itemprop="description" content="Home of the Matrix specification for decentralised communication"><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Client-Server API"/>
+<meta name="twitter:description" content="Home of the Matrix specification for decentralised communication"/>
+
+
+
+
+<link rel="preload" href="/scss/main.min.af4c3a756149c6e6a38a514505696051afd07c3cc0ac1bb64498d5cd0c8f613b.css" as="style">
+<link href="/scss/main.min.af4c3a756149c6e6a38a514505696051afd07c3cc0ac1bb64498d5cd0c8f613b.css" rel="stylesheet" integrity="">
+
+<script
+  src="/js/jquery-3.6.0.min.js"
+  integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK">
+</script>
+
+
+
+<link rel="preload" href="/css/fonts/Inter.css" as="style">
+<link rel="stylesheet" href="/css/fonts/Inter.css">
+
+
+
+
+<link rel="preload" href="/scss/custom.min.e7010c4aa0015f690b91b7b50c35f1a5f21ea69d2fe93db6b124deb2722a2dcf.css" as="style">
+<link href="/scss/custom.min.e7010c4aa0015f690b91b7b50c35f1a5f21ea69d2fe93db6b124deb2722a2dcf.css" rel="stylesheet" integrity="">
+
+
+  </head>
+  <body class="td-home">
+    <header>
+      
+
+
+<nav class="js-navbar-scroll navbar navbar-expand navbar-light flex-column flex-md-row td-navbar">
+	<a class="navbar-brand" href="/">
+		<span class="navbar-logo"><img src="/icons/logo.png" width="30" height="30"/></span>&nbsp;&nbsp;&nbsp;<span class="font-weight-bold">API Documentation</span>
+	</a>
+</nav>
+
+
+
+
+    </header>
+    <div class="container-fluid td-outer">
+      <div class="td-main">
+        <div class="row flex-xl-nowrap">
+          <div class="col-12 col-md-3 col-xl-3 td-sidebar d-print-none">
+            
+<div id="td-sidebar-menu" class="td-sidebar__inner">
+  <div id="content-mobile">
+  <form class="td-sidebar__search d-flex align-items-center">
+    
+    <button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type="button" data-toggle="collapse" data-target="#td-section-nav" aria-controls="td-section-nav" aria-expanded="false" aria-label="Toggle section navigation">
+    </button>
+  </form>
+  </div>
+  <div id="content-desktop"></div>
+  <nav class="collapse td-sidebar-nav" id="td-section-nav">
+    </nav>
+</div>
+          </div>
+          <main class="col-12 col-md-9 col-xl-7 pl-md-5" role="main">
+            
+
+
+
+
+
+            
+<div class="td-content">
+	<h1>Client-Server API</h1>
+        
+	<p>The client-server API allows clients to
+send messages, control rooms and synchronise conversation history. It is
+designed to support both lightweight clients which store no state and
+lazy-load data from the server as required - as well as heavyweight
+clients which maintain a full local persistent copy of server state.</p>
+<h2 id="user">User</h2>
+<h3 id="profiles">Profiles</h3>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_apiclientv3profileuserid">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_api/client/v3/profile/{userId}</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Get the combined profile information for this user. This API may be used
+to fetch the user&rsquo;s own profile information or other users; either
+locally or on remote servers. This API may return keys which are not
+limited to <code>displayname</code> or <code>avatar_url</code>.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>No</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>userId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The user whose profile information to get.</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The profile information for this user.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The server is unwilling to disclose whether the user exists and/or has profile information.</td>
+ </tr>
+ <tr>
+  <td><code>404</code></td>
+  <td>There is no profile information for this user or this user does not exist.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>avatar_url</code></td>
+  <td><code>string</code></td>
+  <td>
+    The user&rsquo;s avatar URL if they have set one, otherwise not present.</td>
+ </tr>
+ <tr>
+  <td><code>displayname</code></td>
+  <td><code>string</code></td>
+  <td>
+    The user&rsquo;s display name if they have set one, otherwise not present.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;avatar_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://*.sending.network/SDGdghriugerRg&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;displayname&#34;</span><span class="p">:</span> <span class="s2">&#34;Alice Margatroid&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_apiclientv3profileuserid_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_FORBIDDEN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Profile lookup over federation is disabled on this server&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>404 response</h3>
+<table id="_apiclientv3profileuserid_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_NOT_FOUND&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Profile not found&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_apiclientv3profileuseridavatar_url">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_api/client/v3/profile/{userId}/avatar_url</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Get the user&rsquo;s avatar URL. This API may be used to fetch the user&rsquo;s
+own avatar URL or to query the URL of other users; either locally or
+on remote servers.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>No</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>userId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The user whose avatar URL to get.</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The avatar URL for this user.</td>
+ </tr>
+ <tr>
+  <td><code>404</code></td>
+  <td>There is no avatar URL for this user or this user does not exist.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>avatar_url</code></td>
+  <td><code>string</code></td>
+  <td>
+    The user&rsquo;s avatar URL if they have set one, otherwise not present.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;avatar_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://*.sending.network/SDGdghriugerRg&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api PUT">
+<details open>
+<summary>
+  <h1 id="put_apiclientv3profileuseridavatar_url">
+   <span class="http-api-method PUT">PUT</span>
+   <span class="endpoint">/_api/client/v3/profile/{userId}/avatar_url</span>
+  </h1>
+</summary>
+  <hr/>
+<p>This API sets the given user&rsquo;s avatar URL. You must have permission to
+set this user&rsquo;s avatar URL, e.g. you need to have their <code>access_token</code>.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>Yes</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>userId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The user whose avatar URL to set.</td>
+ </tr>
+</table>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>avatar_url</code></td>
+  <td><code>string</code></td>
+  <td>
+    The new avatar URL for this user.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;avatar_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://*.sending.network/wefh34uihSDRGhw34&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The avatar URL was set.</td>
+ </tr>
+ <tr>
+  <td><code>429</code></td>
+  <td>This request was rate-limited.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div><h3>429 response</h3>
+<table id="_apiclientv3profileuseridavatar_url_ratelimiterror" class="object-table">
+ <caption>RateLimitError</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The M_LIMIT_EXCEEDED error code</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+ <tr>
+  <td><code>retry_after_ms</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The amount of time in milliseconds the client should wait
+before trying the request again.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_LIMIT_EXCEEDED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Too many requests&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;retry_after_ms&#34;</span><span class="p">:</span> <span class="mi">2000</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_apiclientv3profileuseriddisplayname">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_api/client/v3/profile/{userId}/displayname</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Get the user&rsquo;s display name. This API may be used to fetch the user&rsquo;s
+own displayname or to query the name of other users; either locally or
+on remote servers.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>No</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>userId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The user whose display name to get.</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The display name for this user.</td>
+ </tr>
+ <tr>
+  <td><code>404</code></td>
+  <td>There is no display name for this user or this user does not exist.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>displayname</code></td>
+  <td><code>string</code></td>
+  <td>
+    The user&rsquo;s display name if they have set one, otherwise not present.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;displayname&#34;</span><span class="p">:</span> <span class="s2">&#34;Alice Margatroid&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api PUT">
+<details open>
+<summary>
+  <h1 id="put_apiclientv3profileuseriddisplayname">
+   <span class="http-api-method PUT">PUT</span>
+   <span class="endpoint">/_api/client/v3/profile/{userId}/displayname</span>
+  </h1>
+</summary>
+  <hr/>
+<p>This API sets the given user&rsquo;s display name. You must have permission to
+set this user&rsquo;s display name, e.g. you need to have their <code>access_token</code>.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>Yes</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>userId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The user whose display name to set.</td>
+ </tr>
+</table>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>displayname</code></td>
+  <td><code>string</code></td>
+  <td>
+    The new display name for this user.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;displayname&#34;</span><span class="p">:</span> <span class="s2">&#34;Alice Margatroid&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The display name was set.</td>
+ </tr>
+ <tr>
+  <td><code>429</code></td>
+  <td>This request was rate-limited.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div><h3>429 response</h3>
+<table id="_apiclientv3profileuseriddisplayname_ratelimiterror" class="object-table">
+ <caption>RateLimitError</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The M_LIMIT_EXCEEDED error code</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+ <tr>
+  <td><code>retry_after_ms</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The amount of time in milliseconds the client should wait
+before trying the request again.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_LIMIT_EXCEEDED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Too many requests&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;retry_after_ms&#34;</span><span class="p">:</span> <span class="mi">2000</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="search-user">Search User</h3>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_apiclientv3user_directorysearch">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_api/client/v3/user_directory/search</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Performs a search for users. The server may
+determine which subset of users are searched, however the server
+MUST at a minimum consider the users the requesting user shares a
+room with and those who reside in public rooms (known to the server).
+The search MUST consider local users to the server, and SHOULD
+query remote users as part of the search.</p>
+<p>The search is performed case-insensitively on user IDs and display
+names preferably using a collation determined based upon the
+<code>Accept-Language</code> header provided in the request, if present.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>Yes</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>limit</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The maximum number of results to return. Defaults to 10.</td>
+ </tr>
+ <tr>
+  <td><code>search_term</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The term to search for</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;limit&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;search_term&#34;</span><span class="p">:</span> <span class="s2">&#34;foo&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The results of the search.</td>
+ </tr>
+ <tr>
+  <td><code>429</code></td>
+  <td>This request was rate-limited.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>limited</code></td>
+  <td><code>boolean</code></td>
+  <td>
+    <strong>Required: </strong>Indicates if the result list has been truncated by the limit.</td>
+ </tr>
+ <tr>
+  <td><code>results</code></td>
+  <td><code>[User]</code></td>
+  <td>
+    <strong>Required: </strong>Ordered by rank and then whether or not profile info is available.</td>
+ </tr>
+</table>
+<table id="_apiclientv3user_directorysearch_user" class="object-table">
+ <caption>User</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>avatar_url</code></td>
+  <td><code>string</code></td>
+  <td>
+    The avatar url if one exists.</td>
+ </tr>
+ <tr>
+  <td><code>display_name</code></td>
+  <td><code>string</code></td>
+  <td>
+    The display name of the user, if one exists.</td>
+ </tr>
+ <tr>
+  <td><code>user_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The user&rsquo;s ID.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;limited&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;results&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;avatar_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://bar.com/foo&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;display_name&#34;</span><span class="p">:</span> <span class="s2">&#34;Foo&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;user_id&#34;</span><span class="p">:</span> <span class="s2">&#34;@foo:bar.com&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>429 response</h3>
+<table id="_apiclientv3user_directorysearch_ratelimiterror" class="object-table">
+ <caption>RateLimitError</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The M_LIMIT_EXCEEDED error code</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+ <tr>
+  <td><code>retry_after_ms</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The amount of time in milliseconds the client should wait
+before trying the request again.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_LIMIT_EXCEEDED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Too many requests&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;retry_after_ms&#34;</span><span class="p">:</span> <span class="mi">2000</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="get-joined-rooms">Get Joined Rooms</h3>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_apiclientv3joined_rooms">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_api/client/v3/joined_rooms</span>
+  </h1>
+</summary>
+  <hr/>
+<p>This API returns a list of the user&rsquo;s current rooms.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<p>No request parameters or request body.</p>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>A list of the rooms the user is in.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>joined_rooms</code></td>
+  <td><code>[string]</code></td>
+  <td>
+    <strong>Required: </strong>The ID of each room in which the user has <code>joined</code> membership.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;joined_rooms&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;!foo:example.com&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h2 id="rooms">Rooms</h2>
+<h3 id="create-room">Create Room</h3>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_apiclientv3createroom">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_api/client/v3/createRoom</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Create a new room with various configuration options.</p>
+<p>The server MUST apply the normal state resolution rules when creating
+the new room, including checking power levels for each event. It MUST
+apply the events implied by the request in the following order:</p>
+<ol>
+<li>
+<p>The <code>m.room.create</code> event itself. Must be the first event in the
+room.</p>
+</li>
+<li>
+<p>An <code>m.room.member</code> event for the creator to join the room. This is
+needed so the remaining events can be sent.</p>
+</li>
+<li>
+<p>A default <code>m.room.power_levels</code> event, giving the room creator
+(and not other members) permission to send state events. Overridden
+by the <code>power_level_content_override</code> parameter.</p>
+</li>
+<li>
+<p>An <code>m.room.canonical_alias</code> event if <code>room_alias_name</code> is given.</p>
+</li>
+<li>
+<p>Events set by the <code>preset</code>. Currently these are the <code>m.room.join_rules</code>,
+<code>m.room.history_visibility</code>, and <code>m.room.guest_access</code> state events.</p>
+</li>
+<li>
+<p>Events listed in <code>initial_state</code>, in the order that they are
+listed.</p>
+</li>
+<li>
+<p>Events implied by <code>name</code> and <code>topic</code> (<code>m.room.name</code> and <code>m.room.topic</code>
+state events).</p>
+</li>
+<li>
+<p>Invite events implied by <code>invite</code> and <code>invite_3pid</code> (<code>m.room.member</code> with
+<code>membership: invite</code> and <code>m.room.third_party_invite</code>).</p>
+</li>
+</ol>
+<p>The available presets do the following with respect to room state:</p>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th><code>join_rules</code></th>
+<th><code>history_visibility</code></th>
+<th><code>guest_access</code></th>
+<th>Other</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>private_chat</code></td>
+<td><code>invite</code></td>
+<td><code>shared</code></td>
+<td><code>can_join</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>trusted_private_chat</code></td>
+<td><code>invite</code></td>
+<td><code>shared</code></td>
+<td><code>can_join</code></td>
+<td>All invitees are given the same power level as the room creator.</td>
+</tr>
+<tr>
+<td><code>public_chat</code></td>
+<td><code>public</code></td>
+<td><code>shared</code></td>
+<td><code>forbidden</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The server will create a <code>m.room.create</code> event in the room with the
+requesting user as the creator, alongside other keys provided in the
+<code>creation_content</code>.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>creation_content</code></td>
+  <td><code>CreationContent</code></td>
+  <td>
+    Extra keys, such as <code>m.federate</code>, to be added to the content
+of the <code>m.room.create</code> event. The server will overwrite the following
+keys: <code>creator</code>, <code>room_version</code>. Future versions of the specification
+may allow the server to overwrite other keys.</td>
+ </tr>
+ <tr>
+  <td><code>initial_state</code></td>
+  <td><code>[StateEvent]</code></td>
+  <td>
+    <p>A list of state events to set in the new room. This allows
+the user to override the default state events set in the new
+room. The expected format of the state events are an object
+with type, state_key and content keys set.</p>
+<p>Takes precedence over events set by <code>preset</code>, but gets
+overridden by <code>name</code> and <code>topic</code> keys.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>invite</code></td>
+  <td><code>[string]</code></td>
+  <td>
+    A list of user IDs to invite to the room. This will tell the
+server to invite everyone in the list to the newly created room.</td>
+ </tr>
+ <tr>
+  <td><code>invite_3pid</code></td>
+  <td><code>[Invite3pid]</code></td>
+  <td>
+    A list of objects representing third-party IDs to invite into
+the room.</td>
+ </tr>
+ <tr>
+  <td><code>is_direct</code></td>
+  <td><code>boolean</code></td>
+  <td>
+    This flag makes the server set the <code>is_direct</code> flag on the
+<code>m.room.member</code> events sent to the users in <code>invite</code> and
+<code>invite_3pid</code>.</td>
+ </tr>
+ <tr>
+  <td><code>name</code></td>
+  <td><code>string</code></td>
+  <td>
+    If this is included, an <code>m.room.name</code> event will be sent
+into the room to indicate the name of the room. See Room
+Events for more information on <code>m.room.name</code>.</td>
+ </tr>
+ <tr>
+  <td><code>power_level_content_override</code></td>
+  <td><code>Power Level Event Content</code></td>
+  <td>
+    The power level content to override in the default power level
+event. This object is applied on top of the generated
+<code>m.room.power_levels</code> event content prior to it being sent to the room. Defaults to
+overriding nothing.</td>
+ </tr>
+ <tr>
+  <td><code>preset</code></td>
+  <td><code>string</code></td>
+  <td>
+    <p>Convenience parameter for setting various default state events
+based on a preset.</p>
+<p>If unspecified, the server should use the <code>visibility</code> to determine
+which preset to use. A visibility of <code>public</code> equates to a preset of
+<code>public_chat</code> and <code>private</code> visibility equates to a preset of
+<code>private_chat</code>.</p>
+<p>One of: <code>[private_chat, public_chat, trusted_private_chat]</code>.</p></td>
+ </tr>
+ <tr>
+  <td><code>room_alias_name</code></td>
+  <td><code>string</code></td>
+  <td>
+    <p>The desired room alias <strong>local part</strong>. If this is included, a
+room alias will be created and mapped to the newly created
+room. The alias will belong on the <em>same</em> server which
+created the room. For example, if this was set to &ldquo;foo&rdquo; and
+sent to the server &ldquo;example.com&rdquo; the complete room alias
+would be <code>#foo:example.com</code>.</p>
+<p>The complete room alias will become the canonical alias for
+the room and an <code>m.room.canonical_alias</code> event will be sent
+into the room.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>room_version</code></td>
+  <td><code>string</code></td>
+  <td>
+    The room version to set for the room. If not provided, the server is
+to use its configured default. If provided, the server will return a
+400 error with the errcode <code>M_UNSUPPORTED_ROOM_VERSION</code> if it does not
+support the room version.</td>
+ </tr>
+ <tr>
+  <td><code>topic</code></td>
+  <td><code>string</code></td>
+  <td>
+    If this is included, an <code>m.room.topic</code> event will be sent
+into the room to indicate the topic for the room. See Room
+Events for more information on <code>m.room.topic</code>.</td>
+ </tr>
+ <tr>
+  <td><code>visibility</code></td>
+  <td><code>string</code></td>
+  <td>
+    A <code>public</code> visibility indicates that the room will be shown
+in the published room list. A <code>private</code> visibility will hide
+the room from the published room list. Rooms default to
+<code>private</code> visibility if this key is not included. NB: This
+should not be confused with <code>join_rules</code> which also uses the
+word <code>public</code>.<p>One of: <code>[public, private]</code>.</p></td>
+ </tr>
+</table>
+<table id="_apiclientv3createroom_stateevent" class="object-table">
+ <caption>StateEvent</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>content</code></td>
+  <td><code>object</code></td>
+  <td>
+    <strong>Required: </strong>The content of the event.</td>
+ </tr>
+ <tr>
+  <td><code>state_key</code></td>
+  <td><code>string</code></td>
+  <td>
+    The state_key of the state event. Defaults to an empty string.</td>
+ </tr>
+ <tr>
+  <td><code>type</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The type of event to send.</td>
+ </tr>
+</table>
+<table id="_apiclientv3createroom_invite3pid" class="object-table">
+ <caption>Invite3pid</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>address</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The invitee&rsquo;s third-party identifier.</td>
+ </tr>
+ <tr>
+  <td><code>id_access_token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An access token previously registered with the identity server. Servers
+can treat this as optional to distinguish between r0.5-compatible clients
+and this specification version.</td>
+ </tr>
+ <tr>
+  <td><code>id_server</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The hostname+port of the identity server which should be used for third-party identifier lookups.</td>
+ </tr>
+ <tr>
+  <td><code>medium</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The kind of address being passed in the address field, for example <code>email</code>.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;creation_content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;m.federate&#34;</span><span class="p">:</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;The Grand Duke Pub&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;preset&#34;</span><span class="p">:</span> <span class="s2">&#34;public_chat&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;room_alias_name&#34;</span><span class="p">:</span> <span class="s2">&#34;thepub&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;topic&#34;</span><span class="p">:</span> <span class="s2">&#34;All about happy hour&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>Information about the newly created room.</td>
+ </tr>
+ <tr>
+  <td><code>400</code></td>
+  <td><p>The request is invalid. A meaningful <code>errcode</code> and description
+error text will be returned. Example reasons for rejection include:</p>
+<ul>
+<li>
+<p>The request body is malformed (<code>errcode</code> set to <code>M_BAD_JSON</code>
+or <code>M_NOT_JSON</code>).</p>
+</li>
+<li>
+<p>The room alias specified is already taken (<code>errcode</code> set to
+<code>M_ROOM_IN_USE</code>).</p>
+</li>
+<li>
+<p>The initial state implied by the parameters to the request is
+invalid: for example, the user&rsquo;s <code>power_level</code> is set below
+that necessary to set the room name (<code>errcode</code> set to
+<code>M_INVALID_ROOM_STATE</code>).</p>
+</li>
+<li>
+<p>The server doesn&rsquo;t support the requested room version, or
+one or more users being invited to the new room are residents
+of a server which does not support the requested room version.
+The <code>errcode</code> will be <code>M_UNSUPPORTED_ROOM_VERSION</code> in these
+cases.</p>
+</li>
+</ul>
+</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>room_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The created room&rsquo;s ID.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;room_id&#34;</span><span class="p">:</span> <span class="s2">&#34;!sefiuhWgwghwWgh:example.com&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>400 response</h3>
+<table id="_apiclientv3createroom_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_UNKNOWN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;An unknown error occurred&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="invite-user">Invite User</h3>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_apiclientv3roomsroomidinvite">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_api/client/v3/rooms/{roomId}/invite </span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>This API invites a user to participate in a particular room.
+They do not start participating in the room until they actually join the
+room.</p>
+<p>Only users currently in a particular room can invite other users to
+join that room.</p>
+<p>If the user was invited to the room, the server will append a
+<code>m.room.member</code> event to the room.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>Yes</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>roomId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The room identifier (not alias) to which to invite the user.</td>
+ </tr>
+</table>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>reason</code></td>
+  <td><code>string</code></td>
+  <td>
+    Optional reason to be included as the <code>reason</code> on the subsequent
+membership event.</td>
+ </tr>
+ <tr>
+  <td><code>user_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The fully qualified user ID of the invitee.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;reason&#34;</span><span class="p">:</span> <span class="s2">&#34;Welcome to the team!&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;user_id&#34;</span><span class="p">:</span> <span class="s2">&#34;@cheeky_monkey:sending.network&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The user has been invited to join the room, or was already invited to the room.</td>
+ </tr>
+ <tr>
+  <td><code>400</code></td>
+  <td><p>The request is invalid. A meaningful <code>errcode</code> and description
+error text will be returned. Example reasons for rejection include:</p>
+<ul>
+<li>
+<p>The request body is malformed (<code>errcode</code> set to <code>M_BAD_JSON</code>
+or <code>M_NOT_JSON</code>).</p>
+</li>
+<li>
+<p>One or more users being invited to the room are residents of a
+server which does not support the requested room version. The
+<code>errcode</code> will be <code>M_UNSUPPORTED_ROOM_VERSION</code> in these cases.</p>
+</li>
+</ul>
+</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td><p>You do not have permission to invite the user to the room. A meaningful <code>errcode</code> and description error text will be returned. Example reasons for rejections are:</p>
+<ul>
+<li>The invitee has been banned from the room.</li>
+<li>The invitee is already a member of the room.</li>
+<li>The inviter is not currently in the room.</li>
+<li>The inviter&rsquo;s power level is insufficient to invite users to the room.</li>
+</ul>
+</td>
+ </tr>
+ <tr>
+  <td><code>429</code></td>
+  <td>This request was rate-limited.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div><h3>400 response</h3>
+<table id="_apiclientv3roomsroomidinvite_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_UNKNOWN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;An unknown error occurred&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_apiclientv3roomsroomidinvite_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_FORBIDDEN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;@cheeky_monkey:sending.network is banned from the room&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>429 response</h3>
+<table id="_apiclientv3roomsroomidinvite_ratelimiterror" class="object-table">
+ <caption>RateLimitError</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The M_LIMIT_EXCEEDED error code</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+ <tr>
+  <td><code>retry_after_ms</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The amount of time in milliseconds the client should wait
+before trying the request again.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_LIMIT_EXCEEDED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Too many requests&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;retry_after_ms&#34;</span><span class="p">:</span> <span class="mi">2000</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="join-room">Join Room</h3>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_apiclientv3joinroomidoralias">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_api/client/v3/join/{roomIdOrAlias}</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p><em>Note that this API takes either a room ID or alias, unlike</em> <code>/rooms/{roomId}/join</code>.</p>
+<p>This API starts a user participating in a particular room, if that user
+is allowed to participate in that room. After this call, the client is
+allowed to see all current state events in the room, and all subsequent
+events associated with the room until the user leaves the room.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>Yes</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>roomIdOrAlias</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The room identifier or alias to join.</td>
+ </tr>
+</table>
+<table class="object-table">
+ <caption>query parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>server_name</code></td>
+  <td><code>[string]</code></td>
+  <td>
+    The servers to attempt to join the room through. One of the servers
+must be participating in the room.</td>
+ </tr>
+</table>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>reason</code></td>
+  <td><code>string</code></td>
+  <td>
+    Optional reason to be included as the <code>reason</code> on the subsequent
+membership event.</td>
+ </tr>
+ <tr>
+  <td><code>third_party_signed</code></td>
+  <td><code>Third-party Signed</code></td>
+  <td>
+    If a <code>third_party_signed</code> was supplied, the server must verify
+that it matches a pending <code>m.room.third_party_invite</code> event in the
+room, and perform key validity checking if required by the event.</td>
+ </tr>
+</table>
+<table id="_apiclientv3joinroomidoralias_third-party-signed" class="object-table">
+ <caption>Third-party Signed</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>mxid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The ID of the invitee.</td>
+ </tr>
+ <tr>
+  <td><code>sender</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The ID of the user who issued the invite.</td>
+ </tr>
+ <tr>
+  <td><code>signatures</code></td>
+  <td><code>Signatures</code></td>
+  <td>
+    <strong>Required: </strong>A signatures object containing a signature of the entire signed object.</td>
+ </tr>
+ <tr>
+  <td><code>token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The state key of the m.third_party_invite event.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;reason&#34;</span><span class="p">:</span> <span class="s2">&#34;Looking for support&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;third_party_signed&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;mxid&#34;</span><span class="p">:</span> <span class="s2">&#34;@bob:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@alice:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;signatures&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;example.org&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;ed25519:0&#34;</span><span class="p">:</span> <span class="s2">&#34;some9signature&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;token&#34;</span><span class="p">:</span> <span class="s2">&#34;random8nonce&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td><p>The room has been joined.</p>
+<p>The joined room ID must be returned in the <code>room_id</code> field.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td><p>You do not have permission to join the room. A meaningful <code>errcode</code>
+and description error text will be returned. Example reasons for rejection are:</p>
+<ul>
+<li>The room is invite-only and the user was not invited.</li>
+<li>The user has been banned from the room.</li>
+<li>The room is restricted and the user failed to satisfy any of the conditions.</li>
+</ul>
+</td>
+ </tr>
+ <tr>
+  <td><code>429</code></td>
+  <td>This request was rate-limited.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>room_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The joined room ID.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;room_id&#34;</span><span class="p">:</span> <span class="s2">&#34;!d41d8cd:sending.network&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_apiclientv3joinroomidoralias_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_FORBIDDEN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;You are not invited to this room.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>429 response</h3>
+<table id="_apiclientv3joinroomidoralias_ratelimiterror" class="object-table">
+ <caption>RateLimitError</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The M_LIMIT_EXCEEDED error code</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+ <tr>
+  <td><code>retry_after_ms</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The amount of time in milliseconds the client should wait
+before trying the request again.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_LIMIT_EXCEEDED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Too many requests&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;retry_after_ms&#34;</span><span class="p">:</span> <span class="mi">2000</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_apiclientv3roomsroomidjoin">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_api/client/v3/rooms/{roomId}/join</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p><em>Note that this API requires a room ID, not alias.</em>
+<code>/join/{roomIdOrAlias}</code> <em>exists if you have a room alias.</em></p>
+<p>This API starts a user participating in a particular room, if that user
+is allowed to participate in that room. After this call, the client is
+allowed to see all current state events in the room, and all subsequent
+events associated with the room until the user leaves the room.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>Yes</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>roomId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The room identifier (not alias) to join.</td>
+ </tr>
+</table>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>reason</code></td>
+  <td><code>string</code></td>
+  <td>
+    Optional reason to be included as the <code>reason</code> on the subsequent
+membership event.</td>
+ </tr>
+ <tr>
+  <td><code>third_party_signed</code></td>
+  <td><code>Third-party Signed</code></td>
+  <td>
+    If supplied, the server must verify that it matches a pending
+<code>m.room.third_party_invite</code> event in the room, and perform
+key validity checking if required by the event.</td>
+ </tr>
+</table>
+<table id="_apiclientv3roomsroomidjoin_third-party-signed" class="object-table">
+ <caption>Third-party Signed</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>mxid</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The ID of the invitee.</td>
+ </tr>
+ <tr>
+  <td><code>sender</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The ID of the user who issued the invite.</td>
+ </tr>
+ <tr>
+  <td><code>signatures</code></td>
+  <td><code>Signatures</code></td>
+  <td>
+    <strong>Required: </strong>A signatures object containing a signature of the entire signed object.</td>
+ </tr>
+ <tr>
+  <td><code>token</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The state key of the m.third_party_invite event.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;reason&#34;</span><span class="p">:</span> <span class="s2">&#34;Looking for support&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;third_party_signed&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;mxid&#34;</span><span class="p">:</span> <span class="s2">&#34;@bob:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@alice:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;signatures&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;example.org&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;ed25519:0&#34;</span><span class="p">:</span> <span class="s2">&#34;some9signature&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;token&#34;</span><span class="p">:</span> <span class="s2">&#34;random8nonce&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td><p>The room has been joined.</p>
+<p>The joined room ID must be returned in the <code>room_id</code> field.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td><p>You do not have permission to join the room. A meaningful <code>errcode</code>
+and description error text will be returned. Example reasons for rejection are:</p>
+<ul>
+<li>The room is invite-only and the user was not invited.</li>
+<li>The user has been banned from the room.</li>
+<li>The room is restricted and the user failed to satisfy any of the conditions.</li>
+</ul>
+</td>
+ </tr>
+ <tr>
+  <td><code>429</code></td>
+  <td>This request was rate-limited.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>room_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The joined room ID.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;room_id&#34;</span><span class="p">:</span> <span class="s2">&#34;!d41d8cd:sending.network&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_apiclientv3roomsroomidjoin_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_FORBIDDEN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;You are not invited to this room.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>429 response</h3>
+<table id="_apiclientv3roomsroomidjoin_ratelimiterror" class="object-table">
+ <caption>RateLimitError</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The M_LIMIT_EXCEEDED error code</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+ <tr>
+  <td><code>retry_after_ms</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The amount of time in milliseconds the client should wait
+before trying the request again.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_LIMIT_EXCEEDED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Too many requests&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;retry_after_ms&#34;</span><span class="p">:</span> <span class="mi">2000</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="leave-room">Leave Room</h3>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_apiclientv3roomsroomidleave">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_api/client/v3/rooms/{roomId}/leave</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>This API stops a user participating in a particular room.</p>
+<p>If the user was already in the room, they will no longer be able to see
+new events in the room. If the room requires an invite to join, they
+will need to be re-invited before they can re-join.</p>
+<p>If the user was invited to the room, but had not joined, this call
+serves to reject the invite.</p>
+<p>The user will still be allowed to retrieve history from the room which
+they were previously allowed to see.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>Yes</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>roomId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The room identifier to leave.</td>
+ </tr>
+</table>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>reason</code></td>
+  <td><code>string</code></td>
+  <td>
+    Optional reason to be included as the <code>reason</code> on the subsequent
+membership event.
+<p><strong>Added in <code>v1.1</code></strong></p>
+</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;reason&#34;</span><span class="p">:</span> <span class="s2">&#34;Saying farewell - thanks for the support!&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The room has been left.</td>
+ </tr>
+ <tr>
+  <td><code>429</code></td>
+  <td>This request was rate-limited.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div><h3>429 response</h3>
+<table id="_apiclientv3roomsroomidleave_ratelimiterror" class="object-table">
+ <caption>RateLimitError</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The M_LIMIT_EXCEEDED error code</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+ <tr>
+  <td><code>retry_after_ms</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The amount of time in milliseconds the client should wait
+before trying the request again.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_LIMIT_EXCEEDED&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Too many requests&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;retry_after_ms&#34;</span><span class="p">:</span> <span class="mi">2000</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="kick-user">Kick User</h3>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_apiclientv3roomsroomidkick">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_api/client/v3/rooms/{roomId}/kick</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Kick a user from the room.</p>
+<p>The caller must have the required power level in order to perform this operation.</p>
+<p>Kicking a user adjusts the target member&rsquo;s membership state to be <code>leave</code> with an
+optional <code>reason</code>. Like with other membership changes, a user can directly adjust
+the target member&rsquo;s state by making a request to <code>/rooms/&lt;room id&gt;/state/m.room.member/&lt;user id&gt;</code>.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>roomId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The room identifier (not alias) from which the user should be kicked.</td>
+ </tr>
+</table>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>reason</code></td>
+  <td><code>string</code></td>
+  <td>
+    The reason the user has been kicked. This will be supplied as the
+<code>reason</code> on the target&rsquo;s updated <code>m.room.member</code> event.</td>
+ </tr>
+ <tr>
+  <td><code>user_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The fully qualified user ID of the user being kicked.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;reason&#34;</span><span class="p">:</span> <span class="s2">&#34;Telling unfunny jokes&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;user_id&#34;</span><span class="p">:</span> <span class="s2">&#34;@cheeky_monkey:sending.network&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The user has been kicked from the room.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td><p>You do not have permission to kick the user from the room. A meaningful <code>errcode</code> and
+description error text will be returned. Example reasons for rejections are:</p>
+<ul>
+<li>The kicker is not currently in the room.</li>
+<li>The kickee is not currently in the room.</li>
+<li>The kicker&rsquo;s power level is insufficient to kick users from the room.</li>
+</ul>
+</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_apiclientv3roomsroomidkick_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_FORBIDDEN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;You do not have a high enough power level to kick from this room.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="ban--unban-user">Ban &amp; Unban User</h3>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_apiclientv3roomsroomidban">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_api/client/v3/rooms/{roomId}/ban</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Ban a user in the room. If the user is currently in the room, also kick them.</p>
+<p>When a user is banned from a room, they may not join it or be invited to it until they are unbanned.</p>
+<p>The caller must have the required power level in order to perform this operation.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>roomId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The room identifier (not alias) from which the user should be banned.</td>
+ </tr>
+</table>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>reason</code></td>
+  <td><code>string</code></td>
+  <td>
+    The reason the user has been banned. This will be supplied as the <code>reason</code> on the target&rsquo;s updated <code>m.room.member</code> event.</td>
+ </tr>
+ <tr>
+  <td><code>user_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The fully qualified user ID of the user being banned.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;reason&#34;</span><span class="p">:</span> <span class="s2">&#34;Telling unfunny jokes&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;user_id&#34;</span><span class="p">:</span> <span class="s2">&#34;@cheeky_monkey:sending.network&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The user has been kicked and banned from the room.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td><p>You do not have permission to ban the user from the room. A meaningful <code>errcode</code> and description error text will be returned. Example reasons for rejections are:</p>
+<ul>
+<li>The banner is not currently in the room.</li>
+<li>The banner&rsquo;s power level is insufficient to ban users from the room.</li>
+</ul>
+</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_apiclientv3roomsroomidban_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_FORBIDDEN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;You do not have a high enough power level to ban from this room.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<section class="rendered-data http-api POST">
+<details open>
+<summary>
+  <h1 id="post_apiclientv3roomsroomidunban">
+   <span class="http-api-method POST">POST</span>
+   <span class="endpoint">/_api/client/v3/rooms/{roomId}/unban</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>Unban a user from the room. This allows them to be invited to the room,
+and join if they would otherwise be allowed to join according to its join rules.</p>
+<p>The caller must have the required power level in order to perform this operation.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>roomId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The room identifier (not alias) from which the user should be unbanned.</td>
+ </tr>
+</table>
+<h3>Request body</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>reason</code></td>
+  <td><code>string</code></td>
+  <td>
+    Optional reason to be included as the <code>reason</code> on the subsequent
+membership event.</td>
+ </tr>
+ <tr>
+  <td><code>user_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The fully qualified user ID of the user being unbanned.</td>
+ </tr>
+</table>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;reason&#34;</span><span class="p">:</span> <span class="s2">&#34;They&#39;ve been banned long enough&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;user_id&#34;</span><span class="p">:</span> <span class="s2">&#34;@cheeky_monkey:sending.network&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The user has been unbanned from the room.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td><p>You do not have permission to unban the user from the room. A meaningful <code>errcode</code> and description error text will be returned. Example reasons for rejections are:</p>
+<ul>
+<li>The unbanner&rsquo;s power level is insufficient to unban users from the room.</li>
+</ul>
+</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_apiclientv3roomsroomidunban_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_FORBIDDEN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;You do not have a high enough power level to unban from this room.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="get-joined-members">Get Joined Members</h3>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_apiclientv3roomsroomidjoined_members">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_api/client/v3/rooms/{roomId}/joined_members</span>
+  </h1>
+</summary>
+  <hr/>
+<p>This API returns a map of MXIDs to member info objects for members of the room. The current user must be in the room for it to work, unless it is an Application Service in which case any of the AS&rsquo;s users must be in the room. This API is primarily for Application Services and should be faster to respond than <code>/members</code> as it can be implemented more efficiently on the server.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>roomId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The room to get the members of.</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>A map of MXID to room member objects.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>You aren&rsquo;t a member of the room.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>joined</code></td>
+  <td><code>{string: RoomMember}</code></td>
+  <td>
+    A map from user ID to a RoomMember object.</td>
+ </tr>
+</table>
+<table id="_apiclientv3roomsroomidjoined_members_roommember" class="object-table">
+ <caption>RoomMember</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>avatar_url</code></td>
+  <td><code>string</code></td>
+  <td>
+    The avatar of the user this object is representing.</td>
+ </tr>
+ <tr>
+  <td><code>display_name</code></td>
+  <td><code>string</code></td>
+  <td>
+    The display name of the user this object is representing.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;joined&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;@bar:example.com&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;avatar_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://example.com/printErCATzZijQsSDWorRaK&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;display_name&#34;</span><span class="p">:</span> <span class="s2">&#34;Bar&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h2 id="messages">Messages</h2>
+<h3 id="send-message-event">Send Message Event</h3>
+<section class="rendered-data http-api PUT">
+<details open>
+<summary>
+  <h1 id="put_apiclientv3roomsroomidsendeventtypetxnid">
+   <span class="http-api-method PUT">PUT</span>
+   <span class="endpoint">/_api/client/v3/rooms/{roomId}/send/{eventType}/{txnId}</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>This endpoint is used to send a message event to a room. Message events
+allow access to historical events and pagination, making them suited
+for &ldquo;once-off&rdquo; activity in a room.</p>
+<p>The body of the request should be the content object of the event; the
+fields in this object will vary depending on the type of event.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>eventType</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The type of event to send.</td>
+ </tr>
+ <tr>
+  <td><code>roomId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The room to send the event to.</td>
+ </tr>
+ <tr>
+  <td><code>txnId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The transaction ID for this event. Clients should generate an
+ID unique across requests with the same access token; it will be
+used by the server to ensure idempotency of requests.</td>
+ </tr>
+</table>
+<h3>Request body</h3>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;body&#34;</span><span class="p">:</span> <span class="s2">&#34;hello&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;msgtype&#34;</span><span class="p">:</span> <span class="s2">&#34;m.text&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>An ID for the sent event.</td>
+ </tr>
+ <tr>
+  <td><code>400</code></td>
+  <td>The request is invalid.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>event_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>A unique identifier for the event.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;event_id&#34;</span><span class="p">:</span> <span class="s2">&#34;$YUwRidLecu:example.com&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>400 response</h3>
+<table id="_apiclientv3roomsroomidsendeventtypetxnid_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_UNKNOWN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;An unknown error occurred&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="send-state-event">Send State Event</h3>
+<section class="rendered-data http-api PUT">
+<details open>
+<summary>
+  <h1 id="put_apiclientv3roomsroomidstateeventtypestatekey">
+   <span class="http-api-method PUT">PUT</span>
+   <span class="endpoint">/_api/client/v3/rooms/{roomId}/state/{eventType}/{stateKey}</span>
+  </h1>
+</summary>
+  <hr/>
+<p><p>State events can be sent using this endpoint.  These events will be
+overwritten if <code>&lt;room id&gt;</code>, <code>&lt;event type&gt;</code> and <code>&lt;state key&gt;</code> all
+match.</p>
+<p>Requests to this endpoint <strong>cannot use transaction IDs</strong>
+like other <code>PUT</code> paths because they cannot be differentiated from the
+<code>state_key</code>. Furthermore, <code>POST</code> is unsupported on state paths.</p>
+<p>The body of the request should be the content object of the event; the
+fields in this object will vary depending on the type of event.</p>
+<p>If the event type being sent is <code>m.room.canonical_alias</code> servers
+SHOULD ensure that any new aliases being listed in the event are valid
+per their grammar/syntax and that they point to the room ID where the
+state event is to be sent. Servers do not validate aliases which are
+being removed or are already present in the state event.</p>
+</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>eventType</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The type of event to send.</td>
+ </tr>
+ <tr>
+  <td><code>roomId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The room to set the state in</td>
+ </tr>
+ <tr>
+  <td><code>stateKey</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The state_key for the state to send. Defaults to the empty string. When
+an empty string, the trailing slash on this endpoint is optional.</td>
+ </tr>
+</table>
+<h3>Request body</h3>
+<h3>Request body example</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;avatar_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://localhost/SEsfnsuifSDFSSEF&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;displayname&#34;</span><span class="p">:</span> <span class="s2">&#34;Alice Margatroid&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;membership&#34;</span><span class="p">:</span> <span class="s2">&#34;join&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>An ID for the sent event.</td>
+ </tr>
+ <tr>
+  <td><code>400</code></td>
+  <td><p>The sender&rsquo;s request is malformed.</p>
+<p>Some example error codes include:</p>
+<ul>
+<li>
+<p><code>M_INVALID_PARAM</code>: One or more aliases within the <code>m.room.canonical_alias</code>
+event have invalid syntax.</p>
+</li>
+<li>
+<p><code>M_BAD_ALIAS</code>: One or more aliases within the <code>m.room.canonical_alias</code> event
+do not point to the room ID for which the state event is to be sent to.</p>
+</li>
+</ul>
+</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>The sender doesn&rsquo;t have permission to send the event into the room.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>event_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>A unique identifier for the event.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;event_id&#34;</span><span class="p">:</span> <span class="s2">&#34;$YUwRidLecu:example.com&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>400 response</h3>
+<table id="_apiclientv3roomsroomidstateeventtypestatekey_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_BAD_ALIAS&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;The alias &#39;#hello:example.org&#39; does not point to this room.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3>403 response</h3>
+<table id="_apiclientv3roomsroomidstateeventtypestatekey_error" class="object-table">
+ <caption>Error</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>errcode</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>An error code.</td>
+ </tr>
+ <tr>
+  <td><code>error</code></td>
+  <td><code>string</code></td>
+  <td>
+    A human-readable error message.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errcode&#34;</span><span class="p">:</span> <span class="s2">&#34;M_FORBIDDEN&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;You do not have permission to send the event.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="get-messages">Get Messages</h3>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_apiclientv3roomsroomidmessages">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_api/client/v3/rooms/{roomId}/messages</span>
+  </h1>
+</summary>
+  <hr/>
+<p>This API returns a list of message and state events for a room. It uses
+pagination query parameters to paginate history in the room.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>path parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>roomId</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The room to get events from.</td>
+ </tr>
+</table>
+<table class="object-table">
+ <caption>query parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>dir</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The direction to return events from. If this is set to <code>f</code>, events
+will be returned in chronological order starting at <code>from</code>. If it
+is set to <code>b</code>, events will be returned in <em>reverse</em> chronological
+order, again starting at <code>from</code>.<p>One of: <code>[b, f]</code>.</p></td>
+ </tr>
+ <tr>
+  <td><code>filter</code></td>
+  <td><code>string</code></td>
+  <td>
+    A JSON RoomEventFilter to filter returned events with.</td>
+ </tr>
+ <tr>
+  <td><code>from</code></td>
+  <td><code>string</code></td>
+  <td>
+    <p>The token to start returning events from. This token can be obtained
+from a <code>prev_batch</code> or <code>next_batch</code> token returned by the <code>/sync</code> endpoint,
+or from an <code>end</code> token returned by a previous request to this endpoint.</p>
+<p>This endpoint can also accept a value returned as a <code>start</code> token
+by a previous request to this endpoint, though servers are not
+required to support this. Clients should not rely on the behaviour.</p>
+<p>If it is not provided, the server shall return a list of messages
+from the first or last (per the value of the <code>dir</code> parameter) visible
+event in the room history for the requesting user.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>limit</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The maximum number of events to return. Default: 10.</td>
+ </tr>
+ <tr>
+  <td><code>to</code></td>
+  <td><code>string</code></td>
+  <td>
+    The token to stop returning events at. This token can be obtained from
+a <code>prev_batch</code> or <code>next_batch</code> token returned by the <code>/sync</code> endpoint,
+or from an <code>end</code> token returned by a previous request to this endpoint.</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>A list of messages with a new token to request more.</td>
+ </tr>
+ <tr>
+  <td><code>403</code></td>
+  <td>You aren&rsquo;t a member of the room.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>chunk</code></td>
+  <td><code>[ClientEvent]</code></td>
+  <td>
+    <strong>Required: </strong><p>A list of room events. The order depends on the <code>dir</code> parameter.
+For <code>dir=b</code> events will be in reverse-chronological order,
+for <code>dir=f</code> in chronological order. (The exact definition of <code>chronological</code>
+is dependent on the server implementation.)</p>
+<p>Note that an empty <code>chunk</code> does not <em>necessarily</em> imply that no more events
+are available. Clients should continue to paginate until no <code>end</code> property
+is returned.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>end</code></td>
+  <td><code>string</code></td>
+  <td>
+    <p>A token corresponding to the end of <code>chunk</code>. This token can be passed
+back to this endpoint to request further events.</p>
+<p>If no further events are available (either because we have
+reached the start of the timeline, or because the user does
+not have permission to see any more events), this property
+is omitted from the response.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>start</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>A token corresponding to the start of <code>chunk</code>. This will be the same as
+the value given in <code>from</code>.</td>
+ </tr>
+ <tr>
+  <td><code>state</code></td>
+  <td><code>[ClientEvent]</code></td>
+  <td>
+    <p>A list of state events relevant to showing the <code>chunk</code>. For example, if
+<code>lazy_load_members</code> is enabled in the filter then this may contain
+the membership events for the senders of events in the <code>chunk</code>.</p>
+<p>Unless <code>include_redundant_members</code> is <code>true</code>, the server
+may remove membership events which would have already been
+sent to the client in prior calls to this endpoint, assuming
+the membership of those members has not changed.</p>
+</td>
+ </tr>
+</table>
+<table id="_apiclientv3roomsroomidmessages_clientevent" class="object-table">
+ <caption>ClientEvent</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>content</code></td>
+  <td><code>object</code></td>
+  <td>
+    <strong>Required: </strong>The body of this event, as created by the client which sent it.</td>
+ </tr>
+ <tr>
+  <td><code>event_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The globally unique identifier for this event.</td>
+ </tr>
+ <tr>
+  <td><code>origin_server_ts</code></td>
+  <td><code>integer</code></td>
+  <td>
+    <strong>Required: </strong>Timestamp (in milliseconds since the unix epoch) on originating server
+when this event was sent.</td>
+ </tr>
+ <tr>
+  <td><code>room_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The ID of the room associated with this event.</td>
+ </tr>
+ <tr>
+  <td><code>sender</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>Contains the fully-qualified ID of the user who sent this event.</td>
+ </tr>
+ <tr>
+  <td><code>state_key</code></td>
+  <td><code>string</code></td>
+  <td>
+    <p>Present if, and only if, this event is a <em>state</em> event. The key making
+this piece of state unique in the room. Note that it is often an empty
+string.</p>
+<p>State keys starting with an <code>@</code> are reserved for referencing user IDs, such
+as room members. With the exception of a few events, state events set with a
+given user&rsquo;s ID as the state key MUST only be set by that user.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>type</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The type of the event.</td>
+ </tr>
+ <tr>
+  <td><code>unsigned</code></td>
+  <td><code>UnsignedData</code></td>
+  <td>
+    Contains optional extra information about the event.</td>
+ </tr>
+</table>
+<table id="_apiclientv3roomsroomidmessages_unsigneddata" class="object-table">
+ <caption>UnsignedData</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>age</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The time in milliseconds that has elapsed since the event was sent. This field is generated by the local server, and may be incorrect if the local time on at least one of the two servers is out of sync, which can cause the age to either be negative or greater than it actually is.</td>
+ </tr>
+ <tr>
+  <td><code>prev_content</code></td>
+  <td><code>EventContent</code></td>
+  <td>
+    The previous <code>content</code> for this event. This field is generated
+by the local server, and is only returned if the event is a state event,
+and the client has permission to see the previous content.</td>
+ </tr>
+ <tr>
+  <td><code>redacted_because</code></td>
+  <td><code>ClientEvent</code></td>
+  <td>
+    The event that redacted this event, if any.</td>
+ </tr>
+ <tr>
+  <td><code>transaction_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    The client-supplied transaction ID, for example, provided via
+<code>PUT /_api/client/v3/rooms/{roomId}/send/{eventType}/{txnId}</code>,
+if the client being given the event is the same one which sent it.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;chunk&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;body&#34;</span><span class="p">:</span> <span class="s2">&#34;This is an example text message&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;format&#34;</span><span class="p">:</span> <span class="s2">&#34;custom.html&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;formatted_body&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;b&gt;This is an example text message&lt;/b&gt;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;msgtype&#34;</span><span class="p">:</span> <span class="s2">&#34;m.text&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;event_id&#34;</span><span class="p">:</span> <span class="s2">&#34;$143273582443PhrSn:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;origin_server_ts&#34;</span><span class="p">:</span> <span class="mi">1432735824653</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;room_id&#34;</span><span class="p">:</span> <span class="s2">&#34;!636q39766251:example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@example:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.room.message&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;unsigned&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;age&#34;</span><span class="p">:</span> <span class="mi">1234</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;The room name&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;event_id&#34;</span><span class="p">:</span> <span class="s2">&#34;$143273582443PhrSn:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;origin_server_ts&#34;</span><span class="p">:</span> <span class="mi">1432735824653</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;room_id&#34;</span><span class="p">:</span> <span class="s2">&#34;!636q39766251:example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@example:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;state_key&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.room.name&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;unsigned&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;age&#34;</span><span class="p">:</span> <span class="mi">1234</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;body&#34;</span><span class="p">:</span> <span class="s2">&#34;Gangnam Style&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;info&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;duration&#34;</span><span class="p">:</span> <span class="mi">2140786</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;h&#34;</span><span class="p">:</span> <span class="mi">320</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;mimetype&#34;</span><span class="p">:</span> <span class="s2">&#34;video/mp4&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">1563685</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;thumbnail_info&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;h&#34;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mimetype&#34;</span><span class="p">:</span> <span class="s2">&#34;image/jpeg&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">46144</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;w&#34;</span><span class="p">:</span> <span class="mi">300</span>
+</span></span><span class="line"><span class="cl">          <span class="p">},</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;thumbnail_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://example.org/FHyPlCeYUSFFxlgbQYZmoEoe&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;w&#34;</span><span class="p">:</span> <span class="mi">480</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;msgtype&#34;</span><span class="p">:</span> <span class="s2">&#34;m.video&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://example.org/a526eYUSFFxlgbQYZmo442&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;event_id&#34;</span><span class="p">:</span> <span class="s2">&#34;$143273582443PhrSn:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;origin_server_ts&#34;</span><span class="p">:</span> <span class="mi">1432735824653</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;room_id&#34;</span><span class="p">:</span> <span class="s2">&#34;!636q39766251:example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@example:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.room.message&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;unsigned&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;age&#34;</span><span class="p">:</span> <span class="mi">1234</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;end&#34;</span><span class="p">:</span> <span class="s2">&#34;t47409-4357353_219380_26003_2265&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;start&#34;</span><span class="p">:</span> <span class="s2">&#34;t47429-4392820_219380_26003_2265&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+<h3 id="syncing">Syncing</h3>
+<section class="rendered-data http-api GET">
+<details open>
+<summary>
+  <h1 id="get_apiclientv3sync">
+   <span class="http-api-method GET">GET</span>
+   <span class="endpoint">/_api/client/v3/sync</span>
+  </h1>
+</summary>
+  <hr/>
+<p>Synchronise the client&rsquo;s state with the latest state on the server.
+Clients use this API when they first log in to get an initial snapshot
+of the state on the server, and then continue to call this API to get
+incremental deltas to the state, and to receive new messages.</p>
+<table class="basic-info">
+  <tr>
+   <th>Rate-limited:</th>
+   <td>No</td>
+  </tr>
+ <tr>
+  <th>Requires authentication:</th>
+  <td>Yes</td>
+ </tr>
+</table>
+<hr/>
+<h2>Request</h2>
+<h3>Request parameters</h3>
+<table class="object-table">
+ <caption>query parameters</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>filter</code></td>
+  <td><code>string</code></td>
+  <td>
+    The ID of a filter created using the filter API or a filter JSON
+object encoded as a string. The server will detect whether it is
+an ID or a JSON object by whether the first character is a <code>&quot;{&quot;</code>
+open brace. Passing the JSON inline is best suited to one off
+requests. Creating a filter using the filter API is recommended for
+clients that reuse the same filter multiple times, for example in
+long poll requests.</td>
+ </tr>
+ <tr>
+  <td><code>full_state</code></td>
+  <td><code>boolean</code></td>
+  <td>
+    <p>Controls whether to include the full state for all rooms the user
+is a member of.</p>
+<p>If this is set to <code>true</code>, then all state events will be returned,
+even if <code>since</code> is non-empty. The timeline will still be limited
+by the <code>since</code> parameter. In this case, the <code>timeout</code> parameter
+will be ignored and the query will return immediately, possibly with
+an empty timeline.</p>
+<p>If <code>false</code>, and <code>since</code> is non-empty, only state which has
+changed since the point indicated by <code>since</code> will be returned.</p>
+<p>By default, this is <code>false</code>.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>set_presence</code></td>
+  <td><code>string</code></td>
+  <td>
+    Controls whether the client is automatically marked as online by
+polling this API. If this parameter is omitted then the client is
+automatically marked as online when it uses this API. Otherwise if
+the parameter is set to &ldquo;offline&rdquo; then the client is not marked as
+being online when it uses this API. When set to &ldquo;unavailable&rdquo;, the
+client is marked as being idle.<p>One of: <code>[offline, online, unavailable]</code>.</p></td>
+ </tr>
+ <tr>
+  <td><code>since</code></td>
+  <td><code>string</code></td>
+  <td>
+    A point in time to continue a sync from. This should be the
+<code>next_batch</code> token returned by an earlier call to this endpoint.</td>
+ </tr>
+ <tr>
+  <td><code>timeout</code></td>
+  <td><code>integer</code></td>
+  <td>
+    <p>The maximum time to wait, in milliseconds, before returning this
+request. If no events (or other data) become available before this
+time elapses, the server will return a response with empty fields.</p>
+<p>By default, this is <code>0</code>, so the server will return immediately
+even if the response is empty.</p>
+</td>
+ </tr>
+</table>
+<hr/>
+<h2>Responses</h2>
+<table class="response-table">
+ <thead>
+  <th class="col-status">Status</th>
+  <th class="col-status-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>200</code></td>
+  <td>The initial snapshot or delta for the client to use to update their state.</td>
+ </tr>
+</table>
+<h3>200 response</h3>
+<table class="object-table">
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>account_data</code></td>
+  <td><code>Account Data</code></td>
+  <td>
+    The global private data created by this user.</td>
+ </tr>
+ <tr>
+  <td><code>device_lists</code></td>
+  <td><code>DeviceLists</code></td>
+  <td>
+    Information on end-to-end device updates.</td>
+ </tr>
+ <tr>
+  <td><code>device_one_time_keys_count</code></td>
+  <td><code>One-time keys count</code></td>
+  <td>
+    Information on end-to-end encryption keys.</td>
+ </tr>
+ <tr>
+  <td><code>next_batch</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The batch token to supply in the <code>since</code> param of the next
+<code>/sync</code> request.</td>
+ </tr>
+ <tr>
+  <td><code>presence</code></td>
+  <td><code>Presence</code></td>
+  <td>
+    The updates to the presence status of other users.</td>
+ </tr>
+ <tr>
+  <td><code>rooms</code></td>
+  <td><code>Rooms</code></td>
+  <td>
+    Updates to rooms.</td>
+ </tr>
+ <tr>
+  <td><code>to_device</code></td>
+  <td><code>ToDevice</code></td>
+  <td>
+    Information on the send-to-device messages for the client
+device.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_account-data" class="object-table">
+ <caption>Account Data</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>events</code></td>
+  <td><code>[Event]</code></td>
+  <td>
+    List of events.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_event" class="object-table">
+ <caption>Event</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>content</code></td>
+  <td><code>object</code></td>
+  <td>
+    <strong>Required: </strong>The fields in this object will vary depending on the type of event. When interacting with the REST API, this is the HTTP body.</td>
+ </tr>
+ <tr>
+  <td><code>type</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The type of event. This SHOULD be namespaced similar to Java package naming conventions e.g. &lsquo;com.example.subdomain.event.type&rsquo;</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_presence" class="object-table">
+ <caption>Presence</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>events</code></td>
+  <td><code>[Event]</code></td>
+  <td>
+    List of events.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_rooms" class="object-table">
+ <caption>Rooms</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>invite</code></td>
+  <td><code>Invited Rooms</code></td>
+  <td>
+    The rooms that the user has been invited to, mapped as room ID to
+room information.</td>
+ </tr>
+ <tr>
+  <td><code>join</code></td>
+  <td><code>Joined Rooms</code></td>
+  <td>
+    The rooms that the user has joined, mapped as room ID to
+room information.</td>
+ </tr>
+ <tr>
+  <td><code>knock</code></td>
+  <td><code>Knocked rooms</code></td>
+  <td>
+    The rooms that the user has knocked upon, mapped as room ID to room information.</td>
+ </tr>
+ <tr>
+  <td><code>leave</code></td>
+  <td><code>Left rooms</code></td>
+  <td>
+    The rooms that the user has left or been banned from, mapped as room ID to
+room information.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_invited-room" class="object-table">
+ <caption>Invited Room</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>invite_state</code></td>
+  <td><code>InviteState</code></td>
+  <td>
+    The stripped state] of a room that the user has been invited
+to.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_invitestate" class="object-table">
+ <caption>InviteState</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>events</code></td>
+  <td><code>[StrippedStateEvent]</code></td>
+  <td>
+    The stripped state events that form the invite state.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_strippedstateevent" class="object-table">
+ <caption>StrippedStateEvent</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>content</code></td>
+  <td><code>EventContent</code></td>
+  <td>
+    <strong>Required: </strong>The <code>content</code> for the event.</td>
+ </tr>
+ <tr>
+  <td><code>sender</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The <code>sender</code> for the event.</td>
+ </tr>
+ <tr>
+  <td><code>state_key</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The <code>state_key</code> for the event.</td>
+ </tr>
+ <tr>
+  <td><code>type</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The <code>type</code> for the event.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_joined-room" class="object-table">
+ <caption>Joined Room</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>account_data</code></td>
+  <td><code>Account Data</code></td>
+  <td>
+    The private data that this user has attached to
+this room.</td>
+ </tr>
+ <tr>
+  <td><code>ephemeral</code></td>
+  <td><code>Ephemeral</code></td>
+  <td>
+    The new ephemeral events in the room (events that
+aren&rsquo;t recorded in the timeline or state of the
+room).</td>
+ </tr>
+ <tr>
+  <td><code>state</code></td>
+  <td><code>State</code></td>
+  <td>
+    <p>Updates to the state, between the time indicated by
+the <code>since</code> parameter, and the start of the
+<code>timeline</code> (or all state up to the start of the
+<code>timeline</code>, if <code>since</code> is not given, or
+<code>full_state</code> is true).</p>
+<p>N.B. state updates for <code>m.room.member</code> events will
+be incomplete if <code>lazy_load_members</code> is enabled in
+the <code>/sync</code> filter, and only return the member events
+required to display the senders of the timeline events
+in this response.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>summary</code></td>
+  <td><code>RoomSummary</code></td>
+  <td>
+    Information about the room which clients may need to
+correctly render it to users.</td>
+ </tr>
+ <tr>
+  <td><code>timeline</code></td>
+  <td><code>Timeline</code></td>
+  <td>
+    The timeline of messages and state changes in the
+room.</td>
+ </tr>
+ <tr>
+  <td><code>unread_notifications</code></td>
+  <td><code>Unread Notification Counts</code></td>
+  <td>
+    <p>Counts of unread notifications for this room.</p>
+<p>If <code>unread_thread_notifications</code> was specified as <code>true</code> on the <code>RoomEventFilter</code>,
+these counts will only be for the main timeline rather than all events in the room.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>unread_thread_notifications</code></td>
+  <td><code>Unread Thread Notification Counts</code></td>
+  <td>
+    <p>If <code>unread_thread_notifications</code> was specified as <code>true</code> on the <code>RoomEventFilter</code>,
+the notification counts for each thread in this room. The object is
+keyed by thread root ID, with values matching <code>unread_notifications</code>.</p>
+<p>If a thread does not have any notifications it can be omitted from this object. If
+no threads have notification counts, this whole object can be omitted.</p>
+<p><strong>Added in <code>v1.4</code></strong></p>
+</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_ephemeral" class="object-table">
+ <caption>Ephemeral</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>events</code></td>
+  <td><code>[Event]</code></td>
+  <td>
+    List of events.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_state" class="object-table">
+ <caption>State</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>events</code></td>
+  <td><code>[ClientEventWithoutRoomID]</code></td>
+  <td>
+    List of events.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_clienteventwithoutroomid" class="object-table">
+ <caption>ClientEventWithoutRoomID</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>content</code></td>
+  <td><code>object</code></td>
+  <td>
+    <strong>Required: </strong>The body of this event, as created by the client which sent it.</td>
+ </tr>
+ <tr>
+  <td><code>event_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The globally unique identifier for this event.</td>
+ </tr>
+ <tr>
+  <td><code>origin_server_ts</code></td>
+  <td><code>integer</code></td>
+  <td>
+    <strong>Required: </strong>Timestamp (in milliseconds since the unix epoch) on originating server
+when this event was sent.</td>
+ </tr>
+ <tr>
+  <td><code>sender</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>Contains the fully-qualified ID of the user who sent this event.</td>
+ </tr>
+ <tr>
+  <td><code>state_key</code></td>
+  <td><code>string</code></td>
+  <td>
+    <p>Present if, and only if, this event is a <em>state</em> event. The key making
+this piece of state unique in the room. Note that it is often an empty
+string.</p>
+<p>State keys starting with an <code>@</code> are reserved for referencing user IDs, such
+as room members. With the exception of a few events, state events set with a
+given user&rsquo;s ID as the state key MUST only be set by that user.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>type</code></td>
+  <td><code>string</code></td>
+  <td>
+    <strong>Required: </strong>The type of the event.</td>
+ </tr>
+ <tr>
+  <td><code>unsigned</code></td>
+  <td><code>UnsignedData</code></td>
+  <td>
+    Contains optional extra information about the event.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_unsigneddata" class="object-table">
+ <caption>UnsignedData</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>age</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The time in milliseconds that has elapsed since the event was sent. This field is generated by the local server, and may be incorrect if the local time on at least one of the two servers is out of sync, which can cause the age to either be negative or greater than it actually is.</td>
+ </tr>
+ <tr>
+  <td><code>prev_content</code></td>
+  <td><code>EventContent</code></td>
+  <td>
+    The previous <code>content</code> for this event. This field is generated
+by the local server, and is only returned if the event is a state event,
+and the client has permission to see the previous content.</td>
+ </tr>
+ <tr>
+  <td><code>redacted_because</code></td>
+  <td><code>ClientEventWithoutRoomID</code></td>
+  <td>
+    The event that redacted this event, if any.</td>
+ </tr>
+ <tr>
+  <td><code>transaction_id</code></td>
+  <td><code>string</code></td>
+  <td>
+    The client-supplied transaction ID, for example, provided via
+<code>PUT /_api/client/v3/rooms/{roomId}/send/{eventType}/{txnId}</code>,
+if the client being given the event is the same one which sent it.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_roomsummary" class="object-table">
+ <caption>RoomSummary</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>m.heroes</code></td>
+  <td><code>[string]</code></td>
+  <td>
+    <p>The users which can be used to generate a room name
+if the room does not have one. Required if the room&rsquo;s
+<code>m.room.name</code> or <code>m.room.canonical_alias</code> state events
+are unset or empty.</p>
+<p>This should be the first 5 members of the room, ordered
+by stream ordering, which are joined or invited. The
+list must never include the client&rsquo;s own user ID. When
+no joined or invited members are available, this should
+consist of the banned and left users. More than 5 members
+may be provided, however less than 5 should only be provided
+when there are less than 5 members to represent.</p>
+<p>When lazy-loading room members is enabled, the membership
+events for the heroes MUST be included in the <code>state</code>,
+unless they are redundant. When the list of users changes,
+the server notifies the client by sending a fresh list of
+heroes. If there are no changes since the last sync, this
+field may be omitted.</p>
+</td>
+ </tr>
+ <tr>
+  <td><code>m.invited_member_count</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The number of users with <code>membership</code> of <code>invite</code>.
+If this field has not changed since the last sync, it
+may be omitted. Required otherwise.</td>
+ </tr>
+ <tr>
+  <td><code>m.joined_member_count</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The number of users with <code>membership</code> of <code>join</code>,
+including the client&rsquo;s own user ID. If this field has
+not changed since the last sync, it may be omitted.
+Required otherwise.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_timeline" class="object-table">
+ <caption>Timeline</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>events</code></td>
+  <td><code>[ClientEventWithoutRoomID]</code></td>
+  <td>
+    <strong>Required: </strong>List of events.</td>
+ </tr>
+ <tr>
+  <td><code>limited</code></td>
+  <td><code>boolean</code></td>
+  <td>
+    True if the number of events returned was limited by the <code>limit</code> on the filter.</td>
+ </tr>
+ <tr>
+  <td><code>prev_batch</code></td>
+  <td><code>string</code></td>
+  <td>
+    A token that can be supplied to the <code>from</code> parameter of the <code>/rooms/&lt;room_id&gt;/messages</code> endpoint in order to retrieve earlier events.
+If no earlier events are available, this property may be omitted from the response.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_unread-notification-counts" class="object-table">
+ <caption>Unread Notification Counts</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>highlight_count</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The number of unread notifications for this room with the highlight flag set.</td>
+ </tr>
+ <tr>
+  <td><code>notification_count</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The total number of unread notifications for this room.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_threadnotificationcounts" class="object-table">
+ <caption>ThreadNotificationCounts</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>highlight_count</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The number of unread notifications for this <em>thread</em> with the highlight flag set.</td>
+ </tr>
+ <tr>
+  <td><code>notification_count</code></td>
+  <td><code>integer</code></td>
+  <td>
+    The total number of unread notifications for this <em>thread</em>.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_knocked-room" class="object-table">
+ <caption>Knocked Room</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>knock_state</code></td>
+  <td><code>KnockState</code></td>
+  <td>
+    The stripped state of a room that the user has knocked upon.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_knockstate" class="object-table">
+ <caption>KnockState</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>events</code></td>
+  <td><code>[StrippedStateEvent]</code></td>
+  <td>
+    The stripped state events that form the knock state.</td>
+ </tr>
+</table>
+<table id="_apiclientv3sync_left-room" class="object-table">
+ <caption>Left Room</caption>
+ <thead>
+  <th class="col-name">Name</th>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>account_data</code></td>
+  <td><code>Account Data</code></td>
+  <td>
+    The private data that this user has attached to
+this room.</td>
+ </tr>
+ <tr>
+  <td><code>state</code></td>
+  <td><code>State</code></td>
+  <td>
+    The state updates for the room up to the start of the timeline.</td>
+ </tr>
+ <tr>
+  <td><code>timeline</code></td>
+  <td><code>Timeline</code></td>
+  <td>
+    The timeline of messages and state changes in the
+room up to the point when the user left.</td>
+ </tr>
+</table>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;account_data&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;events&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;custom_config_key&#34;</span><span class="p">:</span> <span class="s2">&#34;custom_config_value&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;org.example.custom.config&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;next_batch&#34;</span><span class="p">:</span> <span class="s2">&#34;s72595_4483_1934&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;presence&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;events&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;avatar_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://localhost/wefuiwegh8742w&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;currently_active&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;last_active_ago&#34;</span><span class="p">:</span> <span class="mi">2478593</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;presence&#34;</span><span class="p">:</span> <span class="s2">&#34;online&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;status_msg&#34;</span><span class="p">:</span> <span class="s2">&#34;Making cupcakes&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@example:localhost&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.presence&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;rooms&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;invite&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;!696r7674:example.com&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;invite_state&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;events&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;My Room Name&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">},</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@alice:example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;state_key&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.room.name&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;membership&#34;</span><span class="p">:</span> <span class="s2">&#34;invite&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">},</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@alice:example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;state_key&#34;</span><span class="p">:</span> <span class="s2">&#34;@bob:example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.room.member&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">          <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;join&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;!726s6s6q:example.com&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;account_data&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;events&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;tags&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                  <span class="nt">&#34;u.work&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&#34;order&#34;</span><span class="p">:</span> <span class="mf">0.9</span>
+</span></span><span class="line"><span class="cl">                  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">              <span class="p">},</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.tag&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;custom_config_key&#34;</span><span class="p">:</span> <span class="s2">&#34;custom_config_value&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">},</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;org.example.custom.room.config&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">          <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;ephemeral&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;events&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;user_ids&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                  <span class="s2">&#34;@alice:sending.network&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                  <span class="s2">&#34;@bob:example.com&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">]</span>
+</span></span><span class="line"><span class="cl">              <span class="p">},</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.typing&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;$1435641916114394fHBLK:sending.network&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                  <span class="nt">&#34;m.read&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&#34;@rikj:jki.re&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                      <span class="nt">&#34;ts&#34;</span><span class="p">:</span> <span class="mi">1436451550453</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">                  <span class="nt">&#34;m.read.private&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&#34;@self:sending.network&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                      <span class="nt">&#34;ts&#34;</span><span class="p">:</span> <span class="mi">1661384801651</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">              <span class="p">},</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.receipt&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">          <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;state&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;events&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;avatar_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://example.org/SEsfnsuifSDFSSEF&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;displayname&#34;</span><span class="p">:</span> <span class="s2">&#34;Alice Margatroid&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;membership&#34;</span><span class="p">:</span> <span class="s2">&#34;join&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;reason&#34;</span><span class="p">:</span> <span class="s2">&#34;Looking for support&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">},</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;event_id&#34;</span><span class="p">:</span> <span class="s2">&#34;$143273582443PhrSn:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;origin_server_ts&#34;</span><span class="p">:</span> <span class="mi">1432735824653</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;room_id&#34;</span><span class="p">:</span> <span class="s2">&#34;!jEsUZKDJdhlrceRyVU:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@example:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;state_key&#34;</span><span class="p">:</span> <span class="s2">&#34;@alice:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.room.member&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;unsigned&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;age&#34;</span><span class="p">:</span> <span class="mi">1234</span>
+</span></span><span class="line"><span class="cl">              <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">          <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;summary&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;m.heroes&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;@alice:example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;@bob:example.com&#34;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">],</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;m.invited_member_count&#34;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;m.joined_member_count&#34;</span><span class="p">:</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;timeline&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;events&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;avatar_url&#34;</span><span class="p">:</span> <span class="s2">&#34;mxc://example.org/SEsfnsuifSDFSSEF&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;displayname&#34;</span><span class="p">:</span> <span class="s2">&#34;Alice Margatroid&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;membership&#34;</span><span class="p">:</span> <span class="s2">&#34;join&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;reason&#34;</span><span class="p">:</span> <span class="s2">&#34;Looking for support&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">},</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;event_id&#34;</span><span class="p">:</span> <span class="s2">&#34;$143273582443PhrSn:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;origin_server_ts&#34;</span><span class="p">:</span> <span class="mi">1432735824653</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;room_id&#34;</span><span class="p">:</span> <span class="s2">&#34;!jEsUZKDJdhlrceRyVU:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@example:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;state_key&#34;</span><span class="p">:</span> <span class="s2">&#34;@alice:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.room.member&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;unsigned&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;age&#34;</span><span class="p">:</span> <span class="mi">1234</span>
+</span></span><span class="line"><span class="cl">              <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;body&#34;</span><span class="p">:</span> <span class="s2">&#34;This is an example text message&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;format&#34;</span><span class="p">:</span> <span class="s2">&#34;custom.html&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;formatted_body&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;b&gt;This is an example text message&lt;/b&gt;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;msgtype&#34;</span><span class="p">:</span> <span class="s2">&#34;m.text&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">},</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;event_id&#34;</span><span class="p">:</span> <span class="s2">&#34;$143273582443PhrSn:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;origin_server_ts&#34;</span><span class="p">:</span> <span class="mi">1432735824653</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;room_id&#34;</span><span class="p">:</span> <span class="s2">&#34;!jEsUZKDJdhlrceRyVU:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@example:example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.room.message&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;unsigned&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;age&#34;</span><span class="p">:</span> <span class="mi">1234</span>
+</span></span><span class="line"><span class="cl">              <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">          <span class="p">],</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;limited&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;prev_batch&#34;</span><span class="p">:</span> <span class="s2">&#34;t34-23535_0_0&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;unread_notifications&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;highlight_count&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;notification_count&#34;</span><span class="p">:</span> <span class="mi">5</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;unread_thread_notifications&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;$threadroot&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;highlight_count&#34;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;notification_count&#34;</span><span class="p">:</span> <span class="mi">6</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;knock&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;!223asd456:example.com&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;knock_state&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;events&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;My Room Name&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">},</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@alice:example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;state_key&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.room.name&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;membership&#34;</span><span class="p">:</span> <span class="s2">&#34;knock&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">},</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;sender&#34;</span><span class="p">:</span> <span class="s2">&#34;@bob:example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;state_key&#34;</span><span class="p">:</span> <span class="s2">&#34;@bob:example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;m.room.member&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">          <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;leave&#34;</span><span class="p">:</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></details>
+</section>
+
+</div>
+
+          </main>
+        </div>
+      </div>
+    </div>
+    
+
+<script src="/js/main.min.be25a680a0d95dc8b5d6664622e2134aa894220e2f224ef609e00f633a3a1b32.js" integrity="sha256-viWmgKDZXci11mZGIuITSqiUIg4vIk72CeAPYzo6GzI=" crossorigin="anonymous"></script>
+<script src='/js/tabpane-persist.js'></script>
+
+
+<script defer language="javascript" type="text/javascript"  src="/js/toc.js"></script>
+
+  </body>
+</html>
